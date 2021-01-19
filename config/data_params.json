@@ -1,0 +1,4 @@
+{
+    "raw_data_folder": "data/raw/",
+    "clean_data_folder": "data/cleaned/"
+}

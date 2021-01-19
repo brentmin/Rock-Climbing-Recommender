@@ -8,6 +8,9 @@
 import argparse
 import time
 
+from src.data.run_data import run_data
+from src.functions import get_params
+
 def main(params=None):
     """
     The main function that runs all code. Typically, this function will be called from the command
@@ -22,15 +25,19 @@ def main(params=None):
     parser = argparse.ArgumentParser()
     parser.add_argument("-d", "--data", action="store_true", help="The program will run data " \
         "scraping code if this flag is present.")
+    parser.add_argument("--data-config", default=["config/data_params.json"], type=str, nargs=1,
+        help="Where to find data parameters. By default \"config/data_params.json\"")
 
     # parse all arguments
     args = parser.parse_args()
     print(args)
 
+    # read the config files
+    data_params = get_params(args.data_config[0])
+
     # if the user requested to run data scraping code
     if(args.data):
-        # TODO: interface with data scraping code
-        pass
+        run_data(data_params)
 
 # run.py cannot be imported as a module
 if __name__ == '__main__':
