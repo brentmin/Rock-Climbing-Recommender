@@ -17,7 +17,6 @@ To run the project, every command must start with "python run.py" from the root 
 |-d, --data|bool|False|Use this flag to run all data scraping code. Be warned that using this flag will first delete **ALL** raw and cleaned data, before downloading new raw data.|
 |-c, --clean|bool|False|Use this flag to run all data cleaning code. Be warned that using this flag will first delete **ALL** raw and cleaned data, before processing raw data into cleaned data.|
 |-\-data-config|str|"config/data_params.json"|The location at which data parameters can be found|
-Note, for the -o, --cuda, and --no-cuda flags, no value is expected after the flag. The project understands what is meant simply by the flag being present.
 
 ### Description of Parameters
 
