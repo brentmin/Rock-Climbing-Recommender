@@ -25,8 +25,10 @@ def main(params=None):
     parser = argparse.ArgumentParser()
     parser.add_argument("-d", "--data", action="store_true", help="The program will run data " \
         "scraping code if this flag is present.")
+    parser.add_argument("-c", "--clean", action="store_true", help="The program will run data " \
+        "cleaning code if this flag is present.")
     parser.add_argument("--data-config", default=["config/data_params.json"], type=str, nargs=1,
-        help="Where to find data parameters. By default \"config/data_params.json\"")
+        help="Where to find data parameters. By default \"config/data_params.json\".")
 
     # parse all arguments
     args = parser.parse_args()
@@ -35,9 +37,8 @@ def main(params=None):
     # read the config files
     data_params = get_params(args.data_config[0])
 
-    # if the user requested to run data scraping code
-    if(args.data):
-        run_data(data_params)
+    # run data code
+    run_data(data_params, args)
 
 # run.py cannot be imported as a module
 if __name__ == '__main__':

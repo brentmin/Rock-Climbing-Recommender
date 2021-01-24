@@ -2,7 +2,7 @@
 # Eric Liu
 # Brent Min
 
-# run_data.py collates all data scraping and cleaning code into one convenient place
+# get_raw_data.py contains all the logic needed to scrape data from the mountainproject website
 
 import requests
 import json
