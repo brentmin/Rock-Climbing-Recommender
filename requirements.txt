@@ -2,3 +2,4 @@ django
 gunicorn
 bs4
 tqdm
+requests
