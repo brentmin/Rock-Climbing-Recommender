@@ -31,4 +31,4 @@ def top_pop():
     result_json = toppop[['climb_id', 'name']].set_index('climb_id').to_json()
     print(result_json)
     
-    return 'The top 10 popular routes:' + str(result_json)
+    return 'The top 10 popular routes: ' + str(result_json)
