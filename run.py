@@ -29,6 +29,8 @@ def main(params=None):
         "cleaning code if this flag is present.")
     parser.add_argument("--data-config", default=["config/data_params.json"], type=str, nargs=1,
         help="Where to find data parameters. By default \"config/data_params.json\".")
+    parser.add_argument("-p", "--top_pop", action="store_true", help="The program will run data " \
+        "return the top 10 most popular/well received as a csv if this flag is present.")
 
     # parse all arguments
     args = parser.parse_args()
