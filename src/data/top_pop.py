@@ -9,7 +9,7 @@ from pymongo import MongoClient
 
 from src.functions import make_absolute
 
-def top_pop(client):
+def top_pop():
     
     '''# get the url at which raw data will be found
     clean_data_path = make_absolute(data_params["clean_data_folder"] + "climbs.csv")
