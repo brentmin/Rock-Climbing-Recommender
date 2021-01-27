@@ -5,10 +5,11 @@
 # top_pop.py contains all the logic needed to return the most basic top 10 most popular/well received routes
 
 import pandas as pd
+from pymongo import MongoClient
 
 from src.functions import make_absolute
 
-def top_pop(data_params):
+def top_pop(client):
     
     '''# get the url at which raw data will be found
     clean_data_path = make_absolute(data_params["clean_data_folder"] + "climbs.csv")
@@ -18,7 +19,6 @@ def top_pop(data_params):
     df = pd.read_csv(clean_data_path)'''
     
     # accessing the data from our MongoDB
-    from pymongo import MongoClient
     client = MongoClient('mongodb+srv://DSC102:coliniscool@cluster0.4gstr.mongodb.net/MountainProject?retryWrites=true&w=majority&ssl=true&ssl_cert_reqs=CERT_NONE')
     
     # get the data
