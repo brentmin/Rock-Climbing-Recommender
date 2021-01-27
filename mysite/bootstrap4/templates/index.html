@@ -12,6 +12,11 @@
     <div class="jumbotron text-center">
         <h1>Test Title</h1>
         <p>Test subtext</p>
+        <form method="POST">
+            {% csrf_token %}
+            <button type="submit" name="run_script">Click Me!</button>
+        </form>
+        <p>{{ test }}</p>
     </div>
 </body>
 
