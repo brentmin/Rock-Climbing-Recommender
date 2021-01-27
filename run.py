@@ -25,7 +25,7 @@ def main(params=None):
     # in that case, change the behavior of the script accordingly
     if(params != None):
         if params['mongodb'] and params['top_pop']:
-            return str(top_pop())
+            return top_pop()
         else:
             return str(params)
 
