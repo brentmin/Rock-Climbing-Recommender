@@ -6,6 +6,7 @@
 
 import requests
 import json
+import time
 
 from bs4 import BeautifulSoup
 from tqdm import tqdm
@@ -53,7 +54,16 @@ def get_route_data(route_url):
                             "user_ratings": dict with key user_id and value user_rating (0-4)
     """
     # get the climb description
-    text = requests.get(route_url).text
+    text = ''
+    while text == '':
+        try:
+            text = requests.get(route_url).text
+            break
+        except:
+            print('too fast, sleeping...')
+            time.sleep(5)
+            print('finished sleeping')
+            continue
     soup = BeautifulSoup(text, 'html.parser')
 
     # split up the stuff we want
@@ -168,17 +178,20 @@ def find_all_routes_in_area(area_url):
     """
     def add_links(soup):
         """
-        TODO
+        Recursive function that adds newly found links under an area into the global list 'links'.
 
-        :param:     soup    TODO
+        :param:     soup    the parsed document of the given area URL
         """
-        # TODO: document function
+        # locates the box containing links and add the links to the global list 'links'
         div = soup.find('div', {'class': 'max-height max-height-md-0 max-height-xs-400'})
         if div:
             a_hrefs = div.find_all('a')
             for link in a_hrefs:
                 links.append(link.get('href'))
-    # TODO: document function
+    # goes through the links until we went through all of them
+    # if a link is still an area, we go through its sublinks again recursively
+    # if a link is a route, we store it in our route_links variable
+    # we return route_links variable in the end as a list of route links
     text = requests.get(area_url).text
     soup = BeautifulSoup(text, 'html.parser')
     links = []
