@@ -6,3 +6,7 @@ requests
 requests[security]
 pyopenssl
 pandas
+dnspython
+pymongo
+pymongo[srv]
+pymongo[tls]
