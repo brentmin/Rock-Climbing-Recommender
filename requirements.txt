@@ -3,3 +3,6 @@ gunicorn
 bs4
 tqdm
 requests
+requests[security]
+pyopenssl
+pandas
