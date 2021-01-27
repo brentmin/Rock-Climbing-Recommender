@@ -24,7 +24,7 @@ def main(params=None):
     # params will only be not None if this function is called from the website
     # in that case, change the behavior of the script accordingly
     if(params != None):
-        return str(top_pop)
+        return str(top_pop())
 
     # all command line arguments
     # for a description of the arguments, refer to the README.md or run "python run.py -h"
