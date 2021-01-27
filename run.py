@@ -9,6 +9,7 @@ import argparse
 import time
 
 from src.data.run_data import run_data
+from src.data.top_pop import top_pop
 from src.functions import get_params
 
 def main(params=None):
@@ -23,7 +24,7 @@ def main(params=None):
     # params will only be not None if this function is called from the website
     # in that case, change the behavior of the script accordingly
     if(params != None):
-        return str(params)
+        return str(top_pop)
 
     # all command line arguments
     # for a description of the arguments, refer to the README.md or run "python run.py -h"
