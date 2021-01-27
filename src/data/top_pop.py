@@ -10,14 +10,25 @@ from src.functions import make_absolute
 
 def top_pop(data_params):
     
-    # get the url at which raw data will be found
+    '''# get the url at which raw data will be found
     clean_data_path = make_absolute(data_params["clean_data_folder"] + "climbs.csv")
     print(clean_data_path)
     
     # get the data
-    df = pd.read_csv(clean_data_path)
+    df = pd.read_csv(clean_data_path)'''
+    
+    # accessing the data from our MongoDB
+    from pymongo import MongoClient
+    client = MongoClient('mongodb+srv://DSC102:coliniscool@cluster0.4gstr.mongodb.net/MountainProject?retryWrites=true&w=majority&ssl=true&ssl_cert_reqs=CERT_NONE')
+    
+    # get the data
+    climbs = client.MountainProject.climbs
+    df = pd.DataFrame.from_records(list(climbs.find()))
     
     #returns a a simple TopPopular
     toppop = df[df['avg_rating'] >= 3.5].sort_values('num_ratings', ascending=False)[:10]
     
-    toppop.to_csv('top_pop_results.csv')
+    result_json = toppop[['climb_id', 'name']].set_index('climb_id').to_json()
+    print(result_json)
+    
+    return result_json
