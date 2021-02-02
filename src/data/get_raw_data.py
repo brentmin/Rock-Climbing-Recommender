@@ -68,8 +68,35 @@ def get_route_data(route_url):
 
     # split up the stuff we want
     data = json.loads("".join(soup.find("script", {"type":"application/ld+json"}).contents))
-    description = soup.find('div', {'class': 'fr-view'}).contents
+    
+    #description + protection sections
+    description_section = soup.find_all('div', {'class': 'fr-view'})
+    description = description_section[0].contents
+    if len(description_section) == 3:
+        protection = description_section[2].contents
+    elif len(description_section) == 2:
+        protection = description_section[1].contents
+    else:
+        protection = 'No protection data'
+    
+    
+    #difficulty rating and difficulty rating system sections
+    difficulty_section = soup.find('h2', {'class': 'inline-block mr-2'})
+    if difficulty_section is None:
+        difficulty_rating = 'NA'
+        difficulty_rating_system = 'NA'
+    else:
+        if isinstance(difficulty_section.contents[0], str):
+            difficulty_rating = difficulty_section.contents[0]
+            difficulty_rating_system = 'NA'
+        else:
+            difficulty_rating = difficulty_section.contents[0].contents[0]
+            difficulty_rating_system = difficulty_section.contents[0].contents[1].contents[0].contents[0]
+        
     data['description'] = ''.join([x for x in description if isinstance(x, str)])
+    data['protection'] = ''.join([x for x in protection if isinstance(x, str)])
+    data['difficulty_rating'] = difficulty_rating
+    data['difficulty_rating_system'] = difficulty_rating_system
     data['route_url'] = route_url
 
     # if there exists more than zero ratings for this climb, then get those user(s)
