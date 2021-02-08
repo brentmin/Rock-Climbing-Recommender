@@ -14,9 +14,52 @@
         <p>Test subtext</p>
         <form method="POST">
             {% csrf_token %}
+
+<!--             <div class="form-group row">
+                <label for="user_url" class="col-md-4 col-form-label">Mountain Project URL</label>
+                <div class="col-md-8">
+                    <input type="url" class="form-control", id="user_url", name="user_url">
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="location" class="col-md-4 col-form-label">Location</label>
+                <div class="col-md-4">
+                    <input type="number" class="form-control", id="location", name="lat", placeholder="Latitude">
+                </div>
+                <div class="col-md-4">
+                    <input type="number" class="form-control", id="location", name="long", placeholder="Longitude">
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="num-rec" class="col-md-4 col-form-label">Number of Recommendations</label>
+                <div class="col-md-8">
+                    <input type="number" class="form-control", id="num-rec", name="num-rec", value="10">
+                </div>
+            </div>
+
+            <fieldset class="form-group">
+                <div class="row">
+                    <label class="col-md-4 col-form-label">Recommender</label>
+                    <div class="col-md-8">
+                        <div class="form-check">
+                            <input class="form-check-input", type="checkbox", id="top-pop", name="top-pop", checked>
+                            <label class="form-check-label", for="top-pop">Most Popular</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input", type="checkbox", id="other-rec", name="other-rec">
+                            <label class="form-check-label", for="other-rec">Other Recommender</label>
+                        </div>
+                    </div>
+                </div>
+            </fieldset> -->
+
+            {{ form }}
+
             <button type="submit" name="run_script">Click Me for the Top 10 Popular Routes!</button>
         </form>
-        <p>{{ test }}</p>
+        <p>{{ recommendations }}</p>
     </div>
 </body>
 

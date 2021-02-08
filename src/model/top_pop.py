@@ -9,7 +9,7 @@ from pymongo import MongoClient
 
 from src.functions import make_absolute
 
-def top_pop(args, data_params):
+def top_pop(args=None, data_params=None):
     """
     TODO
 
@@ -17,7 +17,7 @@ def top_pop(args, data_params):
     :param:     data_params     TODO
     """
     # change behavior if testing
-    if(args["test"]):
+    if((args is not None) and args["test"]):
         # get the url at which raw data will be found
         clean_data_path = make_absolute(data_params["clean_data_folder"] + "climbs.csv")
         print(clean_data_path)
@@ -32,10 +32,8 @@ def top_pop(args, data_params):
         climbs = client.MountainProject.climbs
         df = pd.DataFrame.from_records(list(climbs.find()))
     
-    #returns a a simple TopPopular
+    # returns a a simple TopPopular in dict format
     toppop = df[df['avg_rating'] >= 3.5].sort_values('num_ratings', ascending=False)[:10]
-    
     result_json = toppop[['climb_id', 'name']].set_index('climb_id').to_json()
-    print(result_json)
-    
-    return 'The top 10 popular routes: ' + str(result_json)
+
+    return result_json
