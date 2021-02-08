@@ -24,8 +24,8 @@ def get_raw_data(data_params):
     raw_data = []
 
     # for now, just scrape Yosemite routes
-    area_url = "https://www.mountainproject.com/area/105833381/yosemite-national-park"
-    # area_url = "https://www.mountainproject.com/area/113603736/the-box" # only 7 climbs!
+    # area_url = "https://www.mountainproject.com/area/105833381/yosemite-national-park"
+    area_url = "https://www.mountainproject.com/area/105905660/jamestown" # only 49 climbs!
     all_routes = find_all_routes_in_area(area_url)
 
     # for every route in Yosemite, get the route data
