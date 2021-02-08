@@ -18,6 +18,7 @@ To run the project, every command must start with "python run.py" from the root 
 |-c, --clean|bool|False|Use this flag to run all data cleaning code. Be warned that using this flag will first delete **ALL** raw and cleaned data, before processing raw data into cleaned data.|
 |-p, --top_pop|bool|False|Use this flag to return the top 10 most popular/well received as a csv.|
 |-\-data-config|str|"config/data_params.json"|The location at which data parameters can be found|
+|-\-test|bool|False|Use this flag to run the data pipeline and top pop on a small sample. This will override all other flags|
 
 ### Description of Parameters
 
