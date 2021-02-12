@@ -10,3 +10,4 @@ dnspython
 pymongo
 pymongo[srv]
 pymongo[tls]
+jupyter
