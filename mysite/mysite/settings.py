@@ -25,7 +25,7 @@ SECRET_KEY = 'sirl$xb+tu51h$iroi%v4nkzhky4ihl7$x9i6iwq)r!%eqkf8r'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [".herokuapp.com", "dsc180b-rc-rec.herokuapp.com"]
+ALLOWED_HOSTS = [".herokuapp.com", "dsc180b-rc-rec.herokuapp.com", '127.0.0.1']
 
 
 # Application definition
@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    "mysite.bootstrap4"
+    'bootstrap4.apps.Bootstrap4Config',
+    #"mysite.bootstrap4"
 ]
 
 MIDDLEWARE = [
@@ -50,7 +51,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'mysite.mysite.urls'
+ROOT_URLCONF = 'mysite.urls'
 
 TEMPLATES = [
     {
