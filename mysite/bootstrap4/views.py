@@ -6,6 +6,21 @@ from .forms import RecInputForm
 import sys
 sys.path.append('../../..')
 
+def template(form=None, rec="", latitude=33.8734, longitude=-115.9010):
+    """
+    TODO
+
+    TODO
+    """
+    template_default = {
+        "form": form,
+        "recommendations": rec,
+        "latitude": latitude,
+        "longitude": longitude
+    }
+
+    return template_default
+
 def bootstrap4_index(request):
     # enter the if if the button is pressed on the website
     if(request.method == "POST"):
@@ -39,12 +54,12 @@ def bootstrap4_index(request):
             result = main(inputs)
 
             # return the value of the main code
-            return render(request, 'index.html', {"form": form, "recommendations": result})
+            return render(request, 'index.html', template(form, result, inputs["location"][0], inputs["location"][1]))
 
         else:
             form = RecInputForm()
 
-        return render(request, 'index.html', {"form": form, "recommendations": "bad submit"})
+        return render(request, 'index.html', template(form, "bad submit"))
 
     form = RecInputForm()
-    return render(request, 'index.html', {"form": form, "recommendations": "initial open"})
+    return render(request, 'index.html', template(form))

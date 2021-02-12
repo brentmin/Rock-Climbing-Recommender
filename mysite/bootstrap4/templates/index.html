@@ -15,52 +15,113 @@
         <form method="POST">
             {% csrf_token %}
 
-<!--             <div class="form-group row">
-                <label for="user_url" class="col-md-4 col-form-label">Mountain Project URL</label>
-                <div class="col-md-8">
-                    <input type="url" class="form-control", id="user_url", name="user_url">
-                </div>
-            </div>
-
-            <div class="form-group row">
-                <label for="location" class="col-md-4 col-form-label">Location</label>
-                <div class="col-md-4">
-                    <input type="number" class="form-control", id="location", name="lat", placeholder="Latitude">
-                </div>
-                <div class="col-md-4">
-                    <input type="number" class="form-control", id="location", name="long", placeholder="Longitude">
-                </div>
-            </div>
-
-            <div class="form-group row">
-                <label for="num-rec" class="col-md-4 col-form-label">Number of Recommendations</label>
-                <div class="col-md-8">
-                    <input type="number" class="form-control", id="num-rec", name="num-rec", value="10">
-                </div>
-            </div>
-
-            <fieldset class="form-group">
-                <div class="row">
-                    <label class="col-md-4 col-form-label">Recommender</label>
-                    <div class="col-md-8">
-                        <div class="form-check">
-                            <input class="form-check-input", type="checkbox", id="top-pop", name="top-pop", checked>
-                            <label class="form-check-label", for="top-pop">Most Popular</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input", type="checkbox", id="other-rec", name="other-rec">
-                            <label class="form-check-label", for="other-rec">Other Recommender</label>
-                        </div>
-                    </div>
-                </div>
-            </fieldset> -->
-
             {{ form }}
+
+            <input type="text" id="pac-input" class="controls", placeholder="Search Box">
+            <div id="googleMap" style="width:100%;height:400px;"></div>
 
             <button type="submit" name="run_script">Click Me for the Top 10 Popular Routes!</button>
         </form>
         <p>{{ recommendations }}</p>
     </div>
+
+    <script>
+      function initAutocomplete() {
+        const map = new google.maps.Map(document.getElementById("googleMap"), {
+          center: { lat: parseFloat("{{latitude}}"), lng: parseFloat("{{longitude}}") },
+          zoom: 10,
+          mapTypeId: "roadmap",
+        });
+
+        function getLatLong() {
+            x = parseFloat(document.getElementById('id_latitude').value);
+            y = parseFloat(document.getElementById('id_longitude').value);
+            return{lat: x, lng:y}
+        }
+
+        // add event listeners to the lat/long input fields to update the map position when the
+        // value is changed
+        document.getElementById('id_latitude').addEventListener("change", function() {
+            map.setCenter(getLatLong())
+        });
+        document.getElementById('id_longitude').addEventListener("change", function() {
+            map.setCenter(getLatLong())
+        });
+
+        // Add event listeners to update the lat and long as the map is dragged around
+        google.maps.event.addListener(map,'drag',function(event) {
+            document.getElementById('id_latitude').value = map.getCenter().lat();
+            document.getElementById('id_longitude').value = map.getCenter().lng();
+        });
+        google.maps.event.addListener(map,'dragend',function(event) {
+            document.getElementById('id_latitude').value = map.getCenter().lat();
+            document.getElementById('id_longitude').value = map.getCenter().lng();
+        });
+
+        // Create the search box and link it to the UI element.
+        const input = document.getElementById("pac-input");
+        const searchBox = new google.maps.places.SearchBox(input);
+        map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+        // Bias the SearchBox results towards current map's viewport.
+        map.addListener("bounds_changed", () => {
+          searchBox.setBounds(map.getBounds());
+        });
+        let markers = [];
+        // Listen for the event fired when the user selects a prediction and retrieve
+        // more details for that place.
+        searchBox.addListener("places_changed", () => {
+          const places = searchBox.getPlaces();
+
+          if (places.length == 0) {
+            return;
+          }
+          // Clear out the old markers.
+          markers.forEach((marker) => {
+            marker.setMap(null);
+          });
+          markers = [];
+          // For each place, get the icon, name and location.
+          const bounds = new google.maps.LatLngBounds();
+          places.forEach((place) => {
+            if (!place.geometry || !place.geometry.location) {
+              console.log("Returned place contains no geometry");
+              return;
+            }
+            const icon = {
+              url: place.icon,
+              size: new google.maps.Size(71, 71),
+              origin: new google.maps.Point(0, 0),
+              anchor: new google.maps.Point(17, 34),
+              scaledSize: new google.maps.Size(25, 25),
+            };
+            // Create a marker for each place.
+            markers.push(
+              new google.maps.Marker({
+                map,
+                icon,
+                title: place.name,
+                position: place.geometry.location,
+              })
+            );
+
+            if (place.geometry.viewport) {
+              // Only geocodes have viewport.
+              bounds.union(place.geometry.viewport);
+            } else {
+              bounds.extend(place.geometry.location);
+            }
+          });
+          map.fitBounds(bounds);
+
+          // update lag/long when search box updates the map
+          document.getElementById('id_latitude').value = map.getCenter().lat();
+          document.getElementById('id_longitude').value = map.getCenter().lng();
+        });
+      }
+    </script>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD0dGNYTwHVcaaGSLQI8b6cCJ0swGyBlko&callback=initAutocomplete&libraries=places&v=weekly" async></script>
+
 </body>
 
 </html>
