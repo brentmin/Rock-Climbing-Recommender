@@ -115,6 +115,6 @@ def route_to_int(route_str):
         "14c", "14d", "15a", "15b", "15c", "15d"]
 
     try:
-        return mapping.index(route_str)
+        return mapping.index(route_str.lower())
     except ValueError:
         return None
