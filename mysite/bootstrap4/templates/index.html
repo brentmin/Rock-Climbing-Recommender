@@ -2,9 +2,20 @@
 <html lang="en">
 
 <head>
+    {% load static %}
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <style type="text/css">
+        input[type="number"]::-webkit-outer-spin-button,
+        input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        input[type="number"] {
+            -moz-appearance: textfield;
+        }
+    </style>
     <title>TITLE TODO</title>
 </head>
 
@@ -24,6 +35,10 @@
         </form>
         <p>{{ recommendations }}</p>
     </div>
+
+    <script type="text/javascript">
+        // js to slightly
+    </script>
 
     <script>
       function initAutocomplete() {
@@ -50,12 +65,19 @@
 
         // Add event listeners to update the lat and long as the map is dragged around
         google.maps.event.addListener(map,'drag',function(event) {
-            document.getElementById('id_latitude').value = map.getCenter().lat();
-            document.getElementById('id_longitude').value = map.getCenter().lng();
+            document.getElementById('id_latitude').value = map.getCenter().lat().toFixed(6);
+            document.getElementById('id_longitude').value = map.getCenter().lng().toFixed(6);
         });
         google.maps.event.addListener(map,'dragend',function(event) {
-            document.getElementById('id_latitude').value = map.getCenter().lat();
-            document.getElementById('id_longitude').value = map.getCenter().lng();
+            document.getElementById('id_latitude').value = map.getCenter().lat().toFixed(6);
+            document.getElementById('id_longitude').value = map.getCenter().lng().toFixed(6);
+        });
+
+        // Add event listeners to update the lat/lng when the map is zoomed (for some reason in
+        // google maps, zoom does not have a fixed center but depends on where the mouse is)
+        google.maps.event.addListener(map,'zoom_changed',function(event) {
+            document.getElementById('id_latitude').value = map.getCenter().lat().toFixed(6);
+            document.getElementById('id_longitude').value = map.getCenter().lng().toFixed(6);
         });
 
         // Create the search box and link it to the UI element.
@@ -114,8 +136,8 @@
           map.fitBounds(bounds);
 
           // update lag/long when search box updates the map
-          document.getElementById('id_latitude').value = map.getCenter().lat();
-          document.getElementById('id_longitude').value = map.getCenter().lng();
+          document.getElementById('id_latitude').value = map.getCenter().lat().toFixed(6);
+          document.getElementById('id_longitude').value = map.getCenter().lng().toFixed(6);
         });
       }
     </script>
