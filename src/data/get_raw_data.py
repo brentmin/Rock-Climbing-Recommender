@@ -30,7 +30,9 @@ def get_raw_data(data_params):
 
     # for every route in Yosemite, get the route data
     for route_url in tqdm(all_routes):
-        raw_data.append(get_route_data(route_url))
+        route_data = get_route_data(route_url)
+        if route_data:
+            raw_data.append(route_data)
 
     # save the raw data
     with open(make_absolute(data_params["raw_data_folder"] + "yosemite.json"), "w") as f:
@@ -65,21 +67,12 @@ def get_route_data(route_url):
             print('finished sleeping')
             continue
     soup = BeautifulSoup(text, 'html.parser')
+    
+    #climb type
+    climb_type = soup.find('td', string='Type:').next_sibling.next_sibling.contents[0].strip()
+    if 'Aid' in climb_type or 'Ice' in climb_type or 'Mixed' in climb_type:
+        return None
 
-    # split up the stuff we want
-    data = json.loads("".join(soup.find("script", {"type":"application/ld+json"}).contents))
-    
-    #description + protection sections
-    description_section = soup.find_all('div', {'class': 'fr-view'})
-    description = description_section[0].contents
-    if len(description_section) == 3:
-        protection = description_section[2].contents
-    elif len(description_section) == 2:
-        protection = description_section[1].contents
-    else:
-        protection = 'No protection data'
-    
-    
     #difficulty rating and difficulty rating system sections
     difficulty_section = soup.find('h2', {'class': 'inline-block mr-2'})
     if difficulty_section is None:
@@ -92,7 +85,23 @@ def get_route_data(route_url):
         else:
             difficulty_rating = difficulty_section.contents[0].contents[0]
             difficulty_rating_system = difficulty_section.contents[0].contents[1].contents[0].contents[0]
+    if difficulty_rating_system != 'YDS':
+        return None
+            
+    # split up the stuff we want
+    data = json.loads("".join(soup.find("script", {"type":"application/ld+json"}).contents))
+    
+    #description + protection sections
+    description_section = soup.find_all('div', {'class': 'fr-view'})
+    description = description_section[0].contents
+    if len(description_section) == 3:
+        protection = description_section[2].contents
+    elif len(description_section) == 2:
+        protection = description_section[1].contents
+    else:
+        protection = 'No protection data'
         
+    data['climb_type'] = climb_type
     data['description'] = ''.join([x for x in description if isinstance(x, str)])
     data['protection'] = ''.join([x for x in protection if isinstance(x, str)])
     data['difficulty_rating'] = difficulty_rating
