@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
+from django.core.validators import URLValidator
 
 from .forms import RecInputForm
 
@@ -50,7 +51,7 @@ def bootstrap4_index(request):
     form = RecInputForm()
     return render(request, 'index.html', template(form))
 
-def secondary_validation(request):
+def secondary_validation(request):  
     """
     This function runs some secondary validation code that I could not integrate into django
     without it messing up the website style
@@ -62,6 +63,16 @@ def secondary_validation(request):
     """
     # store error string here if necessary
     error_str = ""
+
+    # get the url
+    url = request.POST.get("url")
+
+    # validate the url
+    validator = URLValidator()
+    try:
+        validator(url)
+    except ValidationError:
+        error_str += f"Mountain Project URL ({url}) is invalid.\n"
 
     # get the boulder grades
     bl = int(request.POST.get("boulder_lower"))
