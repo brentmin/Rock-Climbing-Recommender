@@ -34,6 +34,18 @@
             <button type="submit" name="run_script">Click Me for the Top 10 Popular Routes!</button>
         </form>
         <p>{{ recommendations }}</p>
+        <table>
+            <tr>
+                <th>Climb Name</th>
+                <th>Climb URL</th>
+            </tr>
+            {% for r in results %}
+            <tr>
+                <td>{{ r.name }}</td>
+                <td><a href="{{ r.url }}">{{ r.url }}</a></td>
+            </tr>
+            {% endfor %}
+        </table>
     </div>
 
     <script type="text/javascript">

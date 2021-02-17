@@ -4,10 +4,12 @@ from django.core.validators import URLValidator
 
 from .forms import RecInputForm
 
+import ast
+
 import sys
 sys.path.append('../../..')
 
-def template(form=None, rec="", latitude=33.8734, longitude=-115.9010):
+def template(form=None, rec="", latitude=33.8734, longitude=-115.9010, results=[]):
     """
     TODO
 
@@ -17,7 +19,8 @@ def template(form=None, rec="", latitude=33.8734, longitude=-115.9010):
         "form": form,
         "recommendations": rec,
         "latitude": latitude,
-        "longitude": longitude
+        "longitude": longitude,
+        "results": results
     }
 
     return template_default
@@ -40,16 +43,39 @@ def bootstrap4_index(request):
 
             # run the main code
             from run import main
-            result = main(inputs[0])
+            results = main(inputs[0])
+
+            # transform the return dictionary into the proper format for django templates
+            trans_results = format_django(results)
 
             # return the value of the main code
-            return render(request, 'index.html', template(form, result, inputs[0]["location"][0], 
-                inputs[0]["location"][1]))
+            return render(request, 'index.html', template(form, "", inputs[0]["location"][0], 
+                inputs[0]["location"][1], trans_results))
 
         return render(request, 'index.html', template(form))
 
     form = RecInputForm()
     return render(request, 'index.html', template(form))
+
+def format_django(results):
+    """
+    Take the output of the recommender and modify it so that django can automatically put it into
+    table form
+
+    :param:     results     The output of the recommender
+
+    :return:    [{"name", "url"}, etc.]     The input recommendations formatted such that django
+                                            template and correctly put them into a table
+    """
+    formatted = []
+    for key, value in ast.literal_eval(results)["name"].items():
+        formatted.append({
+            "name": value,
+            "url": f"https://www.mountainproject.com/route/{key}"
+        })
+
+    return formatted
+
 
 def secondary_validation(request):  
     """
@@ -67,12 +93,16 @@ def secondary_validation(request):
     # get the url
     url = request.POST.get("url")
 
-    # validate the url
+    # validate the url structure
     validator = URLValidator()
     try:
         validator(url)
     except ValidationError:
-        error_str += f"Mountain Project URL ({url}) is invalid.\n"
+        error_str += f"Mountain Project URL ({url}) is not a valid user page.\n"
+
+    # validate that the url contains both "mountainproject.com" and "user"
+    if((not error_str) and (("mountainproject.com" not in url) or ("user" not in url))):
+        error_str += f"Mountain Project URL ({url}) is not a valid user page.\n"
 
     # get the boulder grades
     bl = int(request.POST.get("boulder_lower"))
