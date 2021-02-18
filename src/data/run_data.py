@@ -6,6 +6,7 @@
 
 from src.data.get_raw_data import get_raw_data
 from src.data.get_clean_data import get_clean_data
+from src.data.upload_data import upload_data
 from src.functions import *
 
 def run_data(data_params, args):
@@ -32,4 +33,7 @@ def run_data(data_params, args):
         # process raw data into cleaned data if requested from the command line
         if(args["clean"]):
             get_clean_data(data_params)
+
+        if(args["upload"]):
+            upload_data(data_params)
     
