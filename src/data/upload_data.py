@@ -7,12 +7,12 @@
 import json 
 import csv
 
-from get_clean_data import split_into_user_climb
+from src.data.get_clean_data import split_into_user_climb
 
 from pymongo import MongoClient
 
 
-def upload_data():
+def upload_data(data_params):
 
     client_url = 'mongodb+srv://DSC102:coliniscool@cluster0.4gstr.mongodb.net/test'
     # Making Connection 

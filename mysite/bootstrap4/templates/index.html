@@ -33,12 +33,14 @@
 
             <button type="submit" name="run_script">Click Me for the Top 10 Popular Routes!</button>
         </form>
-        <p>{{ recommendations }}</p>
+        <p>{{ notes }}</p>
         <table>
+            {% if results %}
             <tr>
                 <th>Climb Name</th>
                 <th>Climb URL</th>
             </tr>
+            {% endif %}
             {% for r in results %}
             <tr>
                 <td>{{ r.name }}</td>
@@ -49,7 +51,67 @@
     </div>
 
     <script type="text/javascript">
-        // js to slightly
+        function set_readonly(element, b) {
+            if(b) {
+                document.getElementById(element).setAttribute("readonly", true);
+                document.getElementById(element).style.backgroundColor = "#CCCCCC";
+            }
+            else {
+                document.getElementById(element).removeAttribute("readonly");
+                document.getElementById(element).style.backgroundColor = "#FFFFFF";
+            }
+        }
+
+        // js to connect boulder checkboxes with the grade selector dynamically
+        document.getElementById("id_get_boulder").addEventListener("change", (event) => {
+            if(event.currentTarget.checked) {
+                // if the box is checked, then enable the form elements
+                set_readonly("id_boulder_upper", false);
+                set_readonly("id_boulder_lower", false);
+            } else {
+                // if the box is not checked, then disable the form elements
+                set_readonly("id_boulder_upper", true);
+                set_readonly("id_boulder_lower", true);
+            }
+        });
+
+        // js to connect route checkboxes with the grade selector dynamically
+        document.getElementById("id_get_route").addEventListener("change", (event) => {
+            if(event.currentTarget.checked) {
+                // if the box is checked, then set form element to be not readonly
+                set_readonly("id_route_upper", false);
+                set_readonly("id_route_lower", false);
+            } else {
+                // if the box is checked, then set form element to be readonly
+                set_readonly("id_route_upper", true);
+                set_readonly("id_route_lower", true);
+            }
+        });
+
+        // also make sure that the checkboxes correctly enable/disable difficulty selection fields
+        // on page load
+
+        // check for boulder
+        if(document.getElementById("id_get_boulder").checked) {
+            // if the box is checked, then enable the form elements
+            set_readonly("id_boulder_upper", false);
+            set_readonly("id_boulder_lower", false);
+        } else {
+            // if the box is not checked, then disable the form elements
+            set_readonly("id_boulder_upper", true);
+            set_readonly("id_boulder_lower", true);
+        }
+
+        // check for route
+        if(document.getElementById("id_get_route").checked) {
+            // if the box is checked, then enable the form elements
+            set_readonly("id_route_upper", false);
+            set_readonly("id_route_lower", false);
+        } else {
+            // if the box is not checked, then disable the form elements
+            set_readonly("id_route_upper", true);
+            set_readonly("id_route_lower", true);
+        }
     </script>
 
     <script>
