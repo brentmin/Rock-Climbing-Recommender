@@ -34,6 +34,6 @@ def run_data(data_params, args):
         if(args["clean"]):
             get_clean_data(data_params)
 
-        if(args["upload"]):
-            upload_data(data_params)
+        #if(args["upload"]):
+        #    upload_data(data_params)
     
