@@ -8,10 +8,10 @@ import json
 import csv
 
 from pymongo import MongoClient
+from src.functions import *
 
-
-def upload_data(data_params, my_client):
-    climbs = myclient.MountainProject.climbs
-
+def delete_data(data_params, my_client):
+    #wipe out the climbs data from MongoDB
+    climbs = my_client.MountainProject.climbs
     climbs.remove()
     
