@@ -11,3 +11,4 @@ pymongo
 pymongo[srv]
 pymongo[tls]
 jupyter
+sklearn
