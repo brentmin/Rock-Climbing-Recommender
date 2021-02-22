@@ -6,7 +6,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com"> 
+    <link href="https://fonts.googleapis.com/css2?family=Lato&family=Rock+Salt&display=swap" rel="stylesheet">
     <style type="text/css">
+        /* general css */
         input[type="number"]::-webkit-outer-spin-button,
         input[type="number"]::-webkit-inner-spin-button {
             -webkit-appearance: none;
@@ -15,23 +18,99 @@
         input[type="number"] {
             -moz-appearance: textfield;
         }
+        body {
+            max-width: 1000px;
+            margin: auto;
+            background-color: #ffffff;
+            font-family: 'Lato', sans-serif;
+        }
+        h1 {
+            font-family: 'Rock Salt', cursive;
+        }
     </style>
-    <title>TITLE TODO</title>
+    <style type="text/css">
+        /* css for styling form elements */
+        #id_url {
+            width: 70%;
+        }
+        #id_latitude {
+            width: 100px;
+        }
+        #id_longitude {
+            width: 100px;
+        }
+        #id_max_distance {
+            width: 80px;
+        }
+        label[for=id_num_recs] {
+            margin-bottom: 0px;
+            margin-top: 5px;
+        }
+        #id_num_recs {
+            width: 50px;
+        }
+        #id_boulder_lower {
+            width: 30px;
+        }
+        #id_boulder_upper {
+            width: 30px;
+        }
+        #id_route_lower {
+            width: 35px;
+        }
+        #id_route_upper {
+            width: 35px;
+        }
+        #boulder-check {
+            margin-top: 30px;
+        }
+        #route-check {
+            margin-top: 30px;
+        }
+        #rec-box {
+            margin-top: 30px;
+        }
+    </style>
+    <title>ONSIGHT</title>
 </head>
 
 <body>
-    <div class="jumbotron text-center">
-        <h1>Rock Climbing Recommender (Test Title)</h1>
-        <p>Test subtext</p>
+    <div class="text-center bg-white">
+        <h1>OnSight</h1>
+        <p>Nav bar will go here: Home, About, Developers, Code</p>
         <form method="POST">
             {% csrf_token %}
 
-            {{ form }}
+            <!-- Custom bs4 grid for form layout -->
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">{{ form.url.label_tag }} {{ form.url }}</div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">{{ form.latitude.label_tag }} {{ form.latitude }}</div>
+                    <div class="col-md-3">{{ form.longitude.label_tag }} {{ form.longitude }}</div>
+                    <div class="col-md-3">{{ form.max_distance.label_tag }} {{ form.max_distance }}</div>
+                    <div class="col-md-3">{{ form.num_recs.label_tag }}</div>
+                </div>
+                <div class="row">
+                    <div class="col-md-9">
+                        <input type="text" id="pac-input" class="controls", placeholder="Search Box">
+                        <div id="googleMap" style="width:100%;height:400px;"></div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="short-div">{{ form.num_recs }}</div>
+                        <div class="short-div" id="boulder-check">{{ form.get_boulder.label_tag }} {{ form.get_boulder }}</div>
+                        <div class="short-div">{{ form.boulder_lower.label_tag }} {{ form.boulder_lower }}</div>
+                        <div class="short-div">{{ form.boulder_upper.label_tag }} {{ form.boulder_upper }}</div>
+                        <div class="short-div" id="route-check">{{ form.get_route.label_tag }} {{ form.get_route }}</div>
+                        <div class="short-div">{{ form.route_lower.label_tag }} {{ form.route_lower }}</div>
+                        <div class="short-div">{{ form.route_upper.label_tag }} {{ form.route_upper }}</div>
+                        <div class="short-div" id="rec-box">{{ form.rec.label_tag }} {{ form.rec }}</div>
+                    </div>
+                </div>
+            </div>
 
-            <input type="text" id="pac-input" class="controls", placeholder="Search Box">
-            <div id="googleMap" style="width:100%;height:400px;"></div>
-
-            <button type="submit" name="run_script">Click Me for the Top 10 Popular Routes!</button>
+            <button type="submit" name="run_script">Submit</button>
         </form>
         <p>{{ notes }}</p>
         <table>
