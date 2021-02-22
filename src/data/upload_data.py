@@ -7,18 +7,11 @@
 import json 
 import csv
 
-from src.data.get_clean_data import split_into_user_climb
-
 from pymongo import MongoClient
 
 
-def upload_data(data_params):
-
-    client_url = 'mongodb+srv://DSC102:coliniscool@cluster0.4gstr.mongodb.net/test'
-    # Making Connection 
-    my_client = MongoClient(client_url)
-
-    collection = myclient.MountainProject.climbs
+def upload_data(data_params, my_client):
+    climbs = myclient.MountainProject.climbs
 
     data_path = make_absolute(data_params["clean_data_folder"])
 
@@ -31,4 +24,4 @@ def upload_data(data_params):
     # if duplicate in mongo, replace with itself
     # if not, then insert data
     for entry in data:
-        collection.replace_one(entry, entry, upsert=True)
+        climbs.replace_one(entry, entry, upsert=True)

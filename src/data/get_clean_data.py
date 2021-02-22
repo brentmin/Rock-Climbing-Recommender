@@ -138,7 +138,7 @@ def split_into_user_climb(climb_dict):
     #all the info for the climb row
     climb_row = [climb_id, climb_dict["name"], climb_dict["description"], image_url,
         climb_dict["geo"]["latitude"], climb_dict["geo"]["longitude"], 
-        climb_dict["aggregateRating"]["ratingValue"], climb_dict["aggregateRating"]["reviewCount"],
+        float(climb_dict["aggregateRating"]["ratingValue"]), climb_dict["aggregateRating"]["reviewCount"],
         climb_dict["route_url"], climb_types, height_ft, height_m, pitches, grade, climb_dict['protection'],
         difficulty, rock, boulder]
 
