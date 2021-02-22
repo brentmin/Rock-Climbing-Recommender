@@ -6,6 +6,7 @@
 
 from src.data.get_raw_data import get_raw_data
 from src.data.get_clean_data import get_clean_data
+from src.data.delete_data import delete_data
 from src.data.upload_data import upload_data
 from src.functions import *
 
@@ -41,7 +42,7 @@ def run_data(data_params, args):
             get_clean_data(data_params)
 
         if(args["delete"]):
-            print('gone gone gone')
+            delete_data(data_params, my_client)
 
         if(args["upload"]):
             upload_data(data_params, my_client)
