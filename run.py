@@ -45,8 +45,6 @@ def main(params=None):
     parser.add_argument("--test", action="store_true", help="The program will run all code in a " \
         "simplified manner. If this flag is present, it will override all other flags and run " \
         "as if the command \"python run.py -d -c -p\" was run on a small dataset.")
-    parser.add_argument("--delete", action="store_true", help="The program will wipe out all data from MongoDB")
-    parser.add_argument("--upload", action="store_true", help="The program will upload cleaned data to MongoDB")
 
     # parse all arguments
     args = vars(parser.parse_args())
@@ -58,8 +56,6 @@ def main(params=None):
         args["clean"] = True
         args["data_config"] = ["config/data_params.json"]
         args["top_pop"] = True
-        args["delete"] = False
-        args["upload"] = False
     
     # read the config files
     data_params = get_params(args["data_config"][0])
