@@ -33,17 +33,20 @@ def top_pop(args=None, data_params=None, web_params=None):
         climbs = client.MountainProject.climbs
         df = pd.DataFrame.from_records(list(climbs.find()))
 
+    # returns a simple TopPopular
+    toppop = df[df['avg_rating'] >= 3.5].sort_values('num_ratings', ascending=False)
+
     # TODO: filter by location
 
-    # TODO: filter by difficulty
 
     # TODO: filter by type of climb
-    
-    # returns a a simple TopPopular in dict format
-    toppop = df[df['avg_rating'] >= 3.5].sort_values('num_ratings', ascending=False)[:10]
 
+    
+    # TODO: filter by difficulty
+
+    
     # create the formatted recommendations dict
-    result = list(toppop[['climb_id', 'name']].apply(lambda x: {"name": x[1], "url": x[0]}, axis=1))
+    result = list(toppop[['climb_id', 'name']][:web_params['num_recs']].apply(lambda x: {"name": x[1], "url": x[0]}, axis=1))
 
     # make sure the correct number of climbs were returned
     notes = ""
