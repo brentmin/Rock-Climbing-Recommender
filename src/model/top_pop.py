@@ -9,6 +9,8 @@ from pymongo import MongoClient
 
 from src.functions import make_absolute
 
+from math import sin, cos, sqrt, atan2, radians
+
 def top_pop(args=None, data_params=None, web_params=None):
     """
     TODO
@@ -39,10 +41,24 @@ def top_pop(args=None, data_params=None, web_params=None):
     # returns a simple TopPopular
     toppop = df[df['avg_rating'] >= 3.5].sort_values('num_ratings', ascending=False)
 
-    # TODO: filter by location
-
+    # filter by location
     
-    # TODO: filter by type of climb and difficulty
+    def calc_distance(x):
+        # approximate radius of earth in km
+        R = 6373.0
+        target_lat = radians(web_params['location'][0])
+        target_lon = radians(web_params['location'][1])
+        x_lat = radians(x['latitude'])
+        x_lon = radians(x['longitude'])
+        dlon = x_lon - target_long
+        dlat = x_lat - target_lat
+        a = sin(dlat / 2) ** 2 + cos(target_lat) * cos(x_lat) * sin(dlon / 2)**2
+        c = 2 * atan2(sqrt(a), sqrt(1 - a))
+        distance = R * c * 0.621371 #convert to miles by multiplying by 0.621371
+        return distance
+    toppop = toppop[toppop.apply(calc_distance, axis=1) <= web_params['max_distance']]
+    
+    # filter by type of climb and difficulty
     def type_and_difficulty_check(x):
         if x['boulder_climb'] == 1 and x['difficulty'] >= web_params['difficulty_range']['boulder'][0] and x['difficulty'] <= web_params['difficulty_range']['boulder'][1]:
             return True
