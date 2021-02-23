@@ -50,7 +50,7 @@ def top_pop(args=None, data_params=None, web_params=None):
         target_lon = radians(web_params['location'][1])
         x_lat = radians(x['latitude'])
         x_lon = radians(x['longitude'])
-        dlon = x_lon - target_long
+        dlon = x_lon - target_lon
         dlat = x_lat - target_lat
         a = sin(dlat / 2) ** 2 + cos(target_lat) * cos(x_lat) * sin(dlon / 2)**2
         c = 2 * atan2(sqrt(a), sqrt(1 - a))
