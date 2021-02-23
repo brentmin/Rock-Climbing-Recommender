@@ -9,12 +9,13 @@ from pymongo import MongoClient
 
 from src.functions import make_absolute
 
-def top_pop(args=None, data_params=None):
+def top_pop(args=None, data_params=None, web_params=None):
     """
     TODO
 
     :param:     args            TODO
     :param:     data_params     TODO
+    :param:     web_params      TODO
     """
     # change behavior if testing
     if((args is not None) and args["test"]):
@@ -31,9 +32,25 @@ def top_pop(args=None, data_params=None):
         # get the data
         climbs = client.MountainProject.climbs
         df = pd.DataFrame.from_records(list(climbs.find()))
+
+    # TODO: filter by location
+
+    # TODO: filter by difficulty
+
+    # TODO: filter by type of climb
     
     # returns a a simple TopPopular in dict format
     toppop = df[df['avg_rating'] >= 3.5].sort_values('num_ratings', ascending=False)[:10]
-    result_json = toppop[['climb_id', 'name']].set_index('climb_id').to_json()
 
-    return result_json
+    # create the formatted recommendations dict
+    result = list(toppop[['climb_id', 'name']].apply(lambda x: {"name": x[1], "url": x[0]}, axis=1))
+
+    # make sure the correct number of climbs were returned
+    notes = ""
+    if(len(result) < web_params["num_recs"]):
+        notes = f"Could not generate {web_params['num_recs']} recommendations based on the " \
+            "selected options."
+
+    result = {"recommendations": result, "notes": notes}
+
+    return result

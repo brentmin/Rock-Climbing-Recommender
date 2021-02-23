@@ -25,7 +25,7 @@ def main(params=None):
     # in that case, change the behavior of the script accordingly
     if(params != None):
         if(params["recommender"] == "top_pop"):
-            return top_pop()
+            return top_pop(None, None, params)
         elif(params["recommender"] == "debug"):
             return {"recommendations": [], "notes": "User selected debug. Input is: " + str(params)}
         else:
@@ -65,7 +65,7 @@ def main(params=None):
 
     # run top pop code if requested
     if(args["top_pop"]):
-        print(top_pop(args, data_params))
+        print(top_pop(args, data_params, {"num_recs": 10}))
 
 # run.py cannot be imported as a module
 if __name__ == '__main__':
