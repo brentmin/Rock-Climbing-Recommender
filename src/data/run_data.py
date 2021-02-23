@@ -6,8 +6,11 @@
 
 from src.data.get_raw_data import get_raw_data
 from src.data.get_clean_data import get_clean_data
+from src.data.delete_data import delete_data
 from src.data.upload_data import upload_data
 from src.functions import *
+
+from pymongo import MongoClient
 
 def run_data(data_params, args):
     """
@@ -17,8 +20,12 @@ def run_data(data_params, args):
     :param:     args            The command line input parameters. This tells us whether or not to
                                 run data scraping/cleaning code
     """
+    #the mongo connection
+    client_url = 'mongodb+srv://DSC102:coliniscool@cluster0.4gstr.mongodb.net/MountainProject?retryWrites=true&w=majority&ssl=true&ssl_cert_reqs=CERT_NONE'
+    my_client = MongoClient(client_url)
+
     # first check that we want to run some data scraping/cleaning code
-    if(args["data"] or args["clean"]):
+    if(args["data"] or args["clean"] or args["delete"] or args["upload"]):
         # TODO: Delete the data folders in order to empty them, since if the user requests that data
         #       scraping code be run, then overwrite existing data
 
@@ -34,6 +41,9 @@ def run_data(data_params, args):
         if(args["clean"]):
             get_clean_data(data_params)
 
-        #if(args["upload"]):
-        #    upload_data(data_params)
+        if(args["delete"]):
+            delete_data(data_params, my_client)
+
+        if(args["upload"]):
+            upload_data(data_params, my_client)
     

@@ -6,29 +6,17 @@
 
 import json 
 import csv
-
-from src.data.get_clean_data import split_into_user_climb
+import pandas as pd
 
 from pymongo import MongoClient
+from src.functions import *
 
-
-def upload_data(data_params):
-
-    client_url = 'mongodb+srv://DSC102:coliniscool@cluster0.4gstr.mongodb.net/test'
-    # Making Connection 
-    my_client = MongoClient(client_url)
-
-    collection = myclient.MountainProject.climbs
-
-    data_path = make_absolute(data_params["clean_data_folder"])
-
-    # Turns the csv into a list of dicts, each dict is a row
-    # each key in the dict is a column names
-    with open(data_path) as f:
-        data = [{key: value for key, value in row.items()} for row in csv.DictReader(f, skipinitialspace=True)]
-
-    # Loops through and attempts to upload each row data onto mongo
-    # if duplicate in mongo, replace with itself
-    # if not, then insert data
-    for entry in data:
-        collection.replace_one(entry, entry, upsert=True)
+def upload_data(data_params, my_client):
+    #uploads the cleaned climbs data to MondoDB
+    climbs = my_client.MountainProject.climbs
+    climbs_data_path = make_absolute(data_params["clean_data_folder"] + 'climbs.csv')
+    with open(climbs_data_path) as f:
+        climbs_df = pd.read_csv(f)
+        climbs_data = climbs_df.to_dict('records')
+    for entry in climbs_data:
+        climbs.replace_one(entry, entry, upsert=True)
