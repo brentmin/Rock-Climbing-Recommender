@@ -181,9 +181,23 @@ def route_to_int(route_str):
 
     :return:    int         An integer representation of the grade
     """
-    mapping = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10a", "10b", "10c", "10d", "11a", 
-        "11b", "11c", "11d", "12a", "12b", "12c", "12d", "13a", "13b", "13c", "13d", "14a", "14b", 
-        "14c", "14d", "15a", "15b", "15c", "15d"]
+    mapping = ['3rd', '4th', 'Easy 5th', '0', "1", "2", "3", "4", "5", "6", "7", "8", "9",
+        "10a", "10b", "10c", "10d", "11a", "11b", "11c", "11d", "12a", "12b", "12c", "12d", "13a", 
+        "13b", "13c", "13d", "14a", "14b", "14c", "14d", "15a", "15b", "15c", "15d"]
+    if route_str[-1] == '+' or route_str[-1] == '-':
+        route_str = route_str[:-1]
+    if route_str == '10':
+        route_str = '10a'
+    if route_str == '11':
+        route_str = '11a'
+    if route_str == '12':
+        route_str = '12a'
+    if route_str == '13':
+        route_str = '13a'
+    if route_str == '14':
+        route_str = '14a'
+    if route_str == '15':
+        route_str = '15a'
 
     try:
         return mapping.index(route_str.lower())
