@@ -38,12 +38,15 @@ def top_pop(args=None, data_params=None, web_params=None):
 
     # TODO: filter by location
 
-
-    # TODO: filter by type of climb
-
     
-    # TODO: filter by difficulty
-
+    # TODO: filter by type of climb and difficulty
+    def type_and_difficulty_check(x):
+        if x['boulder_climb'] == 1 and x['difficulty'] >= web_params['difficulty_range']['boulder'][0] and x['difficulty'] <= web_params['difficulty_range']['boulder'][1]:
+            return True
+        if x['rock_climb'] == 1 and x['difficulty'] >= web_params['difficulty_range']['route'][0] and x['difficulty'] <= web_params['difficulty_range']['route'][1]:
+            return True
+        return False
+    toppop.apply(type_and_difficulty_check, axis=1)
     
     # create the formatted recommendations dict
     result = list(toppop[['climb_id', 'name']][:web_params['num_recs']].apply(lambda x: {"name": x[1], "url": x[0]}, axis=1))

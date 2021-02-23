@@ -19,6 +19,8 @@ To run the project, every command must start with "python run.py" from the root 
 |-p, --top_pop|bool|False|Use this flag to return the top 10 most popular/well received as a csv.|
 |-\-data-config|str|"config/data_params.json"|The location at which data parameters can be found|
 |-\-test|bool|False|Use this flag to run the data pipeline and top pop on a small sample. This will override all other flags|
+|-\-delete|bool|False|Use this flag to wipe out all data from MongoDB|
+|-\-upload|bool|False|Use this flag to upload cleaned data to MongoDB|
 
 ### Description of Parameters
 
