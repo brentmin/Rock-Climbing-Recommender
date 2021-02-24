@@ -116,7 +116,7 @@ def get_user_history(user_url):
     output = pd.DataFrame(columns=['name', 'url', 'user_rating'])
     text = requests.get(user_url + '/ticks').text
     soup = BeautifulSoup(text, 'html.parser')
-    num_pages = int(soup.find_all('a', {"class":"no-click"})[2].contents[0].strip()[-1])
+    num_pages = int(soup.find_all('a', {"class":"no-click"})[-1].contents[0].strip()[-1])
     for i in range(num_pages):
         text = requests.get(user_url + '/ticks?page=' + str(i + 1)).text
         soup = BeautifulSoup(text, 'html.parser')
