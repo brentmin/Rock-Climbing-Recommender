@@ -10,6 +10,7 @@ import time
 
 from src.data.run_data import run_data
 from src.model.top_pop import top_pop
+from src.model.cosine_rec import cosine_rec
 from src.functions import get_params
 
 def main(params=None):
@@ -26,6 +27,8 @@ def main(params=None):
     if(params != None):
         if(params["recommender"] == "top_pop"):
             return top_pop(None, None, params)
+        if(params['recommender'] == 'cosine_rec'):
+            return cosine_rec(None, None, params)
         elif(params["recommender"] == "debug"):
             results = top_pop(None, None, params)
             results["notes"] += f"\nInput is: {str(params)}" \
