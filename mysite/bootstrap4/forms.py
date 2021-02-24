@@ -6,7 +6,7 @@ class NoColon(forms.Form):
         super(NoColon, self).__init__(*args, **kwargs)
 
 class RecInputForm(NoColon):
-    url = forms.URLField(label="Mountain Project URL:", max_length=100)
+    url = forms.URLField(label="Mountain Project URL:", max_length=100, required=False)
     latitude = forms.DecimalField(label="Latitude:", initial=33.8734, min_value=-90, max_value=90)
     longitude = forms.DecimalField(label="Longitude:", initial=-115.9010, min_value=-180, 
         max_value=180)

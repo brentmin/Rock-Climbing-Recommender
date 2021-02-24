@@ -42,7 +42,7 @@ def template(form=None, notes="", latitude=33.8734, longitude=-115.9010, results
     return template_default
 
 def bootstrap4_index(request):
-    # enter the if if the button is pressed on the website
+    # enter if the button is pressed on the website
     if(request.method == "POST"):
 
         form = RecInputForm(request.POST)
@@ -89,16 +89,17 @@ def secondary_validation(form):
     # get the url
     url = form.cleaned_data["url"]
 
-    # validate the url structure
-    validator = URLValidator()
-    try:
-        validator(url)
-    except ValidationError:
-        error_str += f"Mountain Project URL ({url}) is not a valid user page.\n"
+    if not (form.cleaned_data["rec"][0]=='top_pop'):
+        # validate the url structure
+        validator = URLValidator()
+        try:
+            validator(url)
+        except ValidationError:
+            error_str += f"Mountain Project URL ({url}) is not a valid user page.\n"
 
-    # validate that the url contains both "mountainproject.com" and "user"
-    if((not error_str) and (("mountainproject.com" not in url) or ("user" not in url))):
-        error_str += f"Mountain Project URL ({url}) is not a valid user page.\n"
+        # validate that the url contains both "mountainproject.com" and "user"
+        if((not error_str) and (("mountainproject.com" not in url) or ("user" not in url))):
+            error_str += f"Mountain Project URL ({url}) is not a valid user page.\n"
 
     # get the boulder grades
     if(form.cleaned_data["get_boulder"]):
