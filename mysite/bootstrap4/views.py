@@ -89,6 +89,7 @@ def secondary_validation(form):
     # get the url
     url = form.cleaned_data["url"]
 
+    # if top popular recommender is chosen, don't enter and don't validate url
     if not (form.cleaned_data["rec"][0]=='top_pop'):
         # validate the url structure
         validator = URLValidator()
