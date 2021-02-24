@@ -97,7 +97,7 @@ def cosine_rec(args=None, data_params=None, web_params=None):
     output = output.sort_values(by='similarity_score', ascending=False)[:web_params['num_recs']]
     
     #final list of recommendations
-    df.iloc[output['row']]
+    df = df.iloc[output['row']]
 
     # create the formatted recommendations dict based on the number of recommendations to output
     result = list(df[['climb_id', 'name']][:web_params['num_recs']].apply(lambda x: {"name": x[1], "url": x[0]}, axis=1))
