@@ -70,6 +70,9 @@
         #rec-box {
             margin-top: 30px;
         }
+        #submit-button {
+            margin-top: 30px;
+        }
     </style>
     <title>ONSIGHT</title>
 </head>
@@ -95,7 +98,7 @@
                 <div class="row">
                     <div class="col-md-9">
                         <input type="text" id="pac-input" class="controls", placeholder="Search Box">
-                        <div id="googleMap" style="width:100%;height:400px;"></div>
+                        <div id="googleMap" style="width:100%;height:450px;"></div>
                     </div>
                     <div class="col-md-3">
                         <div class="short-div">{{ form.num_recs }}</div>
@@ -106,27 +109,36 @@
                         <div class="short-div">{{ form.route_lower.label_tag }} {{ form.route_lower }}</div>
                         <div class="short-div">{{ form.route_upper.label_tag }} {{ form.route_upper }}</div>
                         <div class="short-div" id="rec-box">{{ form.rec.label_tag }} {{ form.rec }}</div>
+                        <div class="short-div"><button type="submit" name="run_script" id="submit-button">Submit</button></div>
                     </div>
                 </div>
             </div>
 
-            <button type="submit" name="run_script">Submit</button>
         </form>
-        <p>{{ notes }}</p>
-        <table>
-            {% if results %}
-            <tr>
-                <th>Climb Name</th>
-                <th>Climb URL</th>
-            </tr>
-            {% endif %}
+
+        <!-- Only put in notes if they are present -->
+        {% if notes %}
+        <p style="margin-top: 20px;">{{ notes }}</p>
+        {% endif %}
+
+        <!-- Only put in recommendations if they are present -->
+        {% if results %}
+        <div class="container-fluid" style="max-width: 800px; margin: auto;">
+            <div class="row">
+                <div class="col-md-2"><b>Climb Name</b></div>
+                <div class="col-md-1"><b>Grade</b></div>
+                <div class="col-md-9"><b>Climb Name</b></div>
+            </div>
+            <!-- Loop over the recommendations -->
             {% for r in results %}
-            <tr>
-                <td>{{ r.name }}</td>
-                <td><a href="{{ r.url }}">{{ r.url }}</a></td>
-            </tr>
+            <div class="row">
+                <div class="col-md-2"><a href="https://www.mountainproject.com/route/{{ r.url }}">{{ r.name }}</a></div>
+                <div class="col-md-1">{{ r.difficulty|default:"None" }}</div>
+                <div class="col-md-9">{{ r.description|default:"None" }}</div>
+            </div>
             {% endfor %}
-        </table>
+        </div>
+        {% endif %}
     </div>
 
     <script type="text/javascript">
