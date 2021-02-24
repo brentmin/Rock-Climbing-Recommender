@@ -73,25 +73,6 @@ def bootstrap4_index(request):
     form = RecInputForm()
     return render(request, 'index.html', template(form))
 
-# def format_django(results):
-#     """
-#     Take the output of the recommender and modify it so that django can automatically put it into
-#     table form
-
-#     :param:     results     The output of the recommender
-
-#     :return:    [{"name", "url"}, etc.]     The input recommendations formatted such that django
-#                                             template and correctly put them into a table
-#     """
-#     formatted = []
-#     for key, value in ast.literal_eval(results)["name"].items():
-#         formatted.append({
-#             "name": value,
-#             "url": f"https://www.mountainproject.com/route/{key}"
-#         })
-
-#     return formatted
-
 def secondary_validation(form):  
     """
     This function runs some secondary validation code that I could not integrate into django
