@@ -59,7 +59,7 @@ def cosine_rec(args=None, data_params=None, web_params=None):
         c = 2 * atan2(sqrt(a), sqrt(1 - a))
         distance = R * c * 0.621371 #convert to miles by multiplying by 0.621371
         return distance
-    df = df[df.apply(calc_distance, axis=1) <= web_params['max_distance']]
+    df_filtered = df[df.apply(calc_distance, axis=1) <= web_params['max_distance']]
     
     # filter by type of climb and difficulty
     def type_and_difficulty_check(x):
@@ -68,19 +68,19 @@ def cosine_rec(args=None, data_params=None, web_params=None):
         if x['rock_climb'] == 1 and x['difficulty'] >= web_params['difficulty_range']['route'][0] and x['difficulty'] <= web_params['difficulty_range']['route'][1]:
             return True
         return False
-    df = df[df.apply(type_and_difficulty_check, axis=1)]
+    df_filtered = df_filtered[df_filtered.apply(type_and_difficulty_check, axis=1)]
 
     #get user's past rating data
     user = web_params['user_url']
     history = get_user_history(user)
     #routes the user has completed that are also in our DB
     user_df = pd.DataFrame(history)
-    merged_df = user_df.merge(df, how='inner', on=['name', 'url'])
+    merged_df = user_df.merge(df_filtered, how='inner', on=['name', 'url'])
     #defining favorite as highest rated
     fav_routes = merged_df[merged_df['user_rating'] == merged_df['user_rating'].max()]
     #only look at the numerical attributes so far (will create more later)
     fav_routes_selected_attributes = fav_routes[['latitude', 'longitude', 'avg_rating', 'num_ratings', 'height_ft', 'height_m', 'pitches', 'grade', 'difficulty']]
-    df_selected_attributes = df[['latitude', 'longitude', 'avg_rating', 'num_ratings', 'height_ft', 'height_m', 'pitches', 'grade', 'difficulty']]
+    df_selected_attributes = df_filtered[['latitude', 'longitude', 'avg_rating', 'num_ratings', 'height_ft', 'height_m', 'pitches', 'grade', 'difficulty']]
     #cosine similarity function
     def find_similarity(x, current_row):
         output = pd.DataFrame(columns=['row', 'similarity_score', 'similar_to'])
@@ -97,10 +97,10 @@ def cosine_rec(args=None, data_params=None, web_params=None):
     output = output.sort_values(by='similarity_score', ascending=False)[:web_params['num_recs']]
     
     #final list of recommendations
-    df = df.iloc[output['row']]
+    final = df_filtered.iloc[output['row']]
 
     # create the formatted recommendations dict based on the number of recommendations to output
-    result = list(df[['climb_id', 'name']][:web_params['num_recs']].apply(lambda x: {"name": x[1], "url": x[0]}, axis=1))
+    result = list(final[['climb_id', 'name']][:web_params['num_recs']].apply(lambda x: {"name": x[1], "url": x[0]}, axis=1))
 
     # make sure the correct number of climbs were returned
     notes = ""
