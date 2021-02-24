@@ -91,7 +91,7 @@ def secondary_validation(form):
 
     # if top popular recommender is chosen, don't enter and don't validate url
     if not (form.cleaned_data["rec"][0]=="top_pop" or form.cleaned_data["rec"][0]=="debug"):
-        if url is None:
+        if url == '':
             error_str += f"Must input a Mountain Project user URL\n"
         else:
             # validate the url structure
@@ -100,8 +100,6 @@ def secondary_validation(form):
                 validator(url)
             except ValidationError:
                 error_str += f"Mountain Project URL ({url}) is not a valid user page.\n"
-            except NameError:
-                error_str += f"Must input a Mountain Project user URL\n"
 
             # validate that the url contains both "mountainproject.com" and "user"
             if((not error_str) and (("mountainproject.com" not in url) or ("user" not in url))):
