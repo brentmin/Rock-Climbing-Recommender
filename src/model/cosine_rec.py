@@ -96,30 +96,17 @@ def cosine_rec(args=None, data_params=None, web_params=None):
     #only output the top N recommendations
     output = output.sort_values(by='similarity_score', ascending=False)[:web_params['num_recs']]
     
-    #final list of recommendations
-    final = df.iloc[output['row']]
+    #final list of recommendations with however many recommendations are requested
+    final = df.iloc[output['row']][:web_params["num_recs"]]
 
-    # create the formatted recommendations dict based on the number of recommendations to output
-    result = list(final[['climb_id', 'name']][:web_params['num_recs']].apply(lambda x: {"name": x[1], "url": x[0]}, axis=1))
-
-    # make sure the correct number of climbs were returned
-    notes = ""
-    if(len(result) < web_params["num_recs"]):
-        notes = f"Could not generate {web_params['num_recs']} recommendations based on the " \
-            "selected options."
-
-    result = {"recommendations": result, "notes": notes}
-
-    return result
-
-    '''# generate any generic notes
-    notes = generate_notes(toppop, web_params)
+    # generate any generic notes
+    notes = generate_notes(final, web_params)
     
     # create the formatted recommendations dict based on the number of recommendations to output
-    result = format_df(df)
+    result = format_df(final)
 
     # put results and notes together and return 
-    return  {"recommendations": result, "notes": notes}'''
+    return  {"recommendations": result, "notes": notes}
 
 def get_user_history(user_url):
     output = pd.DataFrame(columns=['name', 'url', 'user_rating'])
