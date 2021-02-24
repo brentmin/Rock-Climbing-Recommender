@@ -102,38 +102,40 @@ def split_into_user_climb(climb_dict):
     difficulty_mapping = ['3rd', '4th', 'Easy 5th', '0', "1", "2", "3", "4", "5", "6", "7", "8", "9",
         "10a", "10b", "10c", "10d", "11a", "11b", "11c", "11d", "12a", "12b", "12c", "12d", "13a", 
         "13b", "13c", "13d", "14a", "14b", "14c", "14d", "15a", "15b", "15c", "15d"]
-    difficulty_conversion = {'V': '7', 'VB': '8', 'V0': '9', 'V1': '10c', 'V2': '11a', 'V3': '11b', 'V4': '12a',
-        'V5': '12b', 'V6': '12c', 'V7': '13a', 'V8': '13b', 'V9': '13d', 'V10': '14a', 'V11': '14b', 'V12': '14c',
-        'V13': '14c'}
     route_str = climb_dict['difficulty_rating'].strip()
+    #if it's a normal rock climbing route
     if route_str[0] != 'V':
         if '.' in route_str:
             route_str = route_str.split('.')[1].split('/')[0]
         rock = 1
         boulder = 0
+        if route_str[-1] == '+' or route_str[-1] == '-':
+            route_str = route_str[:-1]
+        if route_str == '10':
+            route_str = '10a'
+        if route_str == '11':
+            route_str = '11a'
+        if route_str == '12':
+            route_str = '12a'
+        if route_str == '13':
+            route_str = '13a'
+        if route_str == '14':
+            route_str = '14a'
+        if route_str == '15':
+            route_str = '15a'
+        difficulty = difficulty_mapping.index(route_str)
+    #if it's a bouldering climb
     else:
         for i in range(1, len(route_str)):
             if route_str[i].isnumeric() == False:
                 route_str = route_str[:i]
                 break
-        route_str = difficulty_conversion[route_str]
         rock = 0
         boulder = 1
-    if route_str[-1] == '+' or route_str[-1] == '-':
-        route_str = route_str[:-1]
-    if route_str == '10':
-        route_str = '10a'
-    if route_str == '11':
-        route_str = '11a'
-    if route_str == '12':
-        route_str = '12a'
-    if route_str == '13':
-        route_str = '13a'
-    if route_str == '14':
-        route_str = '14a'
-    if route_str == '15':
-        route_str = '15a'
-    difficulty = difficulty_mapping.index(route_str)
+        if len(route_str) < 2:
+            difficulty = 0
+        else:
+            difficulty = int(route_str[1:])
 
     #all the info for the climb row
     climb_row = [climb_id, climb_dict["name"], climb_dict["description"], image_url,
