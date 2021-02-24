@@ -14,7 +14,7 @@ class RecInputForm(NoColon):
     rec = forms.MultipleChoiceField(label="Recommenders:", choices=(
         ("top_pop", "Top Popular"),
         ('cosine_rec', 'Cosine Similarity'),
-        ("debug", "Debug (show input)"),))
+        ("debug", "Debug (show I/O)"),))
     num_recs = forms.IntegerField(label="Number of Recommendations:", initial=10, min_value=1)
     boulder_lower = forms.IntegerField(label="Lowest Boulder Grade: V", min_value=0, max_value=16, 
         initial=0)

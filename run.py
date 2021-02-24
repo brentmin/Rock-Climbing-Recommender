@@ -31,8 +31,8 @@ def main(params=None):
             return cosine_rec(None, None, params)
         elif(params["recommender"] == "debug"):
             results = top_pop(None, None, params)
-            results["notes"] += f"\nInput is: {str(params)}" \
-                f"\nOutput is: {str(results['recommendations'])}"
+            results["notes"].append(f"\nInput is: {str(params)}")
+            results["notes"].append(f"\nOutput is: {str(results['recommendations'])}")
             return results
         else:
             return str(params)
@@ -46,7 +46,7 @@ def main(params=None):
         "cleaning code if this flag is present.")
     parser.add_argument("--data-config", default=["config/data_params.json"], type=str, nargs=1,
         help="Where to find data parameters. By default \"config/data_params.json\".")
-    parser.add_argument("-p", "--top_pop", action="store_true", help="The program will run data " \
+    parser.add_argument("-p", "--top-pop", action="store_true", help="The program will run data " \
         "return the top 10 most popular/well received as a csv if this flag is present.")
     parser.add_argument("--test", action="store_true", help="The program will run all code in a " \
         "simplified manner. If this flag is present, it will override all other flags and run " \

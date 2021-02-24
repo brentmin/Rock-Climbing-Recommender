@@ -84,7 +84,7 @@ def secondary_validation(form):
                                 contains the error message (can be "")
     """
     # store error string here if necessary
-    error_str = ""
+    errors = []
 
     # get the url
     url = form.cleaned_data["url"]
@@ -92,18 +92,18 @@ def secondary_validation(form):
     # if top popular recommender is chosen, don't enter and don't validate url
     if not (form.cleaned_data["rec"][0]=="top_pop" or form.cleaned_data["rec"][0]=="debug"):
         if url == '':
-            error_str += f"Must input a Mountain Project user URL\n"
+            errors.append(f"Must input a Mountain Project user URL")
         else:
             # validate the url structure
             validator = URLValidator()
             try:
                 validator(url)
             except ValidationError:
-                error_str += f"Mountain Project URL ({url}) is not a valid user page.\n"
+                errors.append(f"Mountain Project URL ({url}) is not a valid user page.")
 
             # validate that the url contains both "mountainproject.com" and "user"
-            if((not error_str) and (("mountainproject.com" not in url) or ("user" not in url))):
-                error_str += f"Mountain Project URL ({url}) is not a valid user page.\n"
+            if((len(errors) == 0) and (("mountainproject.com" not in url) or ("user" not in url))):
+                errors.append(f"Mountain Project URL ({url}) is not a valid user page.")
 
     # get the boulder grades
     if(form.cleaned_data["get_boulder"]):
@@ -112,8 +112,9 @@ def secondary_validation(form):
 
         # validate the boulder grades if the box is checked
         if(bl > bu):
-            error_str += f"Lowest Boulder Grade (V{bl}) should be less than or equal to Highest " \
-                f"Boulder Grade (V{bu}).\n"
+            error_str = f"Lowest Boulder Grade (V{bl}) should be less than or equal to Highest " \
+                f"Boulder Grade (V{bu})."
+            errors.append(error_str)
     # if the user did not want boulders
     else:
         bl = -1
@@ -126,16 +127,19 @@ def secondary_validation(form):
 
         # validate the route grades
         if(rl is None):
-            error_str += f"Lowest Route Grade (5.{form.cleaned_data['route_lower']}) is an " \
-                "invalid difficulty.\n"
+            error_str = f"Lowest Route Grade (5.{form.cleaned_data['route_lower']}) is an " \
+                "invalid difficulty."
+            errors.append(error_str)
         if(ru is None):
-            error_str += f"Highest Route Grade (5.{form.cleaned_data['route_upper']}) is an " \
+            error_str = f"Highest Route Grade (5.{form.cleaned_data['route_upper']}) is an " \
                 "invalid difficulty.\n"
+            errors.append(error_str)
         if((rl is not None) and (ru is not None)):
             if(rl > ru):
-                error_str += f"Lowest Route Grade (5.{form.cleaned_data['route_lower']}) should " \
+                error_str = f"Lowest Route Grade (5.{form.cleaned_data['route_lower']}) should " \
                     "be less than or equal to Highest Route Grade " \
                     f"(5.{form.cleaned_data['route_upper']}).\n"
+                errors.append(error_str)
     # if the user did not want routes
     else:  
         rl = -1
@@ -143,7 +147,7 @@ def secondary_validation(form):
 
     # make sure that the user selected at least one of boulder/route
     if(bl == -1 and rl == -1):
-        error_str += "One of Boulder or Route must be checked.\n"
+        errors.append("One of Boulder or Route must be checked.\n")
 
     # create the config dictionary to pass into main
     inputs = {
@@ -157,7 +161,7 @@ def secondary_validation(form):
             "route": [rl, ru]
         }
     }
-    return (inputs, error_str)
+    return (inputs, errors)
 
 def route_to_int(route_str):
     """

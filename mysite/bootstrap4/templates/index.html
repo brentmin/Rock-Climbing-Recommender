@@ -73,6 +73,12 @@
         #submit-button {
             margin-top: 30px;
         }
+        #recommendations {
+            max-width: 1000px; 
+            margin-top: 20px;
+            margin-left: auto;
+            margin-right: auto;
+        }
     </style>
     <title>ONSIGHT</title>
 </head>
@@ -118,23 +124,27 @@
 
         <!-- Only put in notes if they are present -->
         {% if notes %}
-        <p style="margin-top: 20px;">{{ notes }}</p>
+        <div style="margin-top: 20px;">
+            {% for n in notes %}
+                <p style="margin-top: 0px; margin-bottom: 0px;">{{ n }}</p>
+            {% endfor %}
+        </div>
         {% endif %}
 
         <!-- Only put in recommendations if they are present -->
         {% if results %}
-        <div class="container-fluid" style="max-width: 1000px; margin: auto;">
+        <div class="container-fluid" id="recommendations">
             <div class="row">
-                <div class="col-md-3"><b>Climb Name</b></div>
+                <div class="col-md-2"><b>Climb Name</b></div>
                 <div class="col-md-1"><b>Grade</b></div>
-                <div class="col-md-8"><b>Climb Name</b></div>
+                <div class="col-md-9"><b>Description</b></div>
             </div>
             <!-- Loop over the recommendations -->
             {% for r in results %}
-            <div class="row">
-                <div class="col-md-3"><a href="https://www.mountainproject.com/route/{{ r.url }}">{{ r.name }}</a></div>
+            <div class="row" style="margin-top: 5px;">
+                <div class="col-md-2"><a href="https://www.mountainproject.com/route/{{ r.url }}">{{ r.name }}</a></div>
                 <div class="col-md-1">{{ r.difficulty|default:"None" }}</div>
-                <div class="col-md-8">{{ r.description|default:"None" }}</div>
+                <div class="col-md-9">{{ r.description|default:"None" }}</div>
             </div>
             {% endfor %}
         </div>
