@@ -17,6 +17,8 @@ import requests
 from bs4 import BeautifulSoup, Tag
 import json
 
+from src.model.model_functions import filter_df, format_df, generate_notes
+
 def cosine_rec(args=None, data_params=None, web_params=None):
     """
     TODO
