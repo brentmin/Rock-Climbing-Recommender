@@ -9,6 +9,8 @@ from pymongo import MongoClient
 
 from src.functions import make_absolute
 
+from math import sin, cos, sqrt, atan2, radians
+
 def cosine_rec(args=None, data_params=None, web_params=None):
     """
     TODO
