@@ -97,7 +97,7 @@ def cosine_rec(args=None, data_params=None, web_params=None):
     output = output.sort_values(by='similarity_score', ascending=False)[:web_params['num_recs']]
     
     #final list of recommendations
-    df = df.iloc[output['row']]
+    df.iloc[output['row']]
 
     # create the formatted recommendations dict based on the number of recommendations to output
     result = list(df[['climb_id', 'name']][:web_params['num_recs']].apply(lambda x: {"name": x[1], "url": x[0]}, axis=1))
@@ -112,11 +112,20 @@ def cosine_rec(args=None, data_params=None, web_params=None):
 
     return result
 
+    '''# generate any generic notes
+    notes = generate_notes(toppop, web_params)
+    
+    # create the formatted recommendations dict based on the number of recommendations to output
+    result = format_df(df)
+
+    # put results and notes together and return 
+    return  {"recommendations": result, "notes": notes}'''
+
 def get_user_history(user_url):
     output = pd.DataFrame(columns=['name', 'url', 'user_rating'])
     text = requests.get(user_url + '/ticks').text
     soup = BeautifulSoup(text, 'html.parser')
-    num_pages = int(soup.find_all('a', {"class":"no-click"})[-1].contents[0].strip()[-1])
+    num_pages = int(soup.find_all('a', {"class":"no-click"})[2].contents[0].strip()[-1])
     for i in range(num_pages):
         text = requests.get(user_url + '/ticks?page=' + str(i + 1)).text
         soup = BeautifulSoup(text, 'html.parser')
