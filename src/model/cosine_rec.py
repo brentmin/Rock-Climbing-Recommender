@@ -11,6 +11,12 @@ from src.functions import make_absolute
 
 from math import sin, cos, sqrt, atan2, radians
 
+import numpy as np
+from sklearn.metrics.pairwise import cosine_similarity
+import requests
+from bs4 import BeautifulSoup, Tag
+import json
+
 def cosine_rec(args=None, data_params=None, web_params=None):
     """
     TODO
