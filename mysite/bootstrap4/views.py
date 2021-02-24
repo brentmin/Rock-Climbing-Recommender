@@ -91,16 +91,19 @@ def secondary_validation(form):
 
     # if top popular recommender is chosen, don't enter and don't validate url
     if not (form.cleaned_data["rec"][0]=="top_pop" or form.cleaned_data["rec"][0]=="debug"):
-        # validate the url structure
-        validator = URLValidator()
-        try:
-            validator(url)
-        except ValidationError:
-            error_str += f"Mountain Project URL ({url}) is not a valid user page.\n"
+        if url is None:
+            error_str += f"Must input a Mountain Project user URL"
+        else:
+            # validate the url structure
+            validator = URLValidator()
+            try:
+                validator(url)
+            except ValidationError:
+                error_str += f"Mountain Project URL ({url}) is not a valid user page.\n"
 
-        # validate that the url contains both "mountainproject.com" and "user"
-        if((not error_str) and (("mountainproject.com" not in url) or ("user" not in url))):
-            error_str += f"Mountain Project URL ({url}) is not a valid user page.\n"
+            # validate that the url contains both "mountainproject.com" and "user"
+            if((not error_str) and (("mountainproject.com" not in url) or ("user" not in url))):
+                error_str += f"Mountain Project URL ({url}) is not a valid user page.\n"
 
     # get the boulder grades
     if(form.cleaned_data["get_boulder"]):
