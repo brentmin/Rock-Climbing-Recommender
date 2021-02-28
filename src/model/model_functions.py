@@ -37,14 +37,16 @@ def generate_notes(rec_df, web_params):
         # possible to have less than web_params["num_recs"] recommendations at this point
         num_boulders = rec_df["boulder_climb"].sum()
         if(num_boulders == 0):
-            notes.append(f"The top {len(rec_df.index)} recommendations are all routes.")
+            notes.append(f"The top {len(rec_df.index)} recommendations are all routes. " \
+                "To generate boulders, turn off routes or increase the number of recommendations.")
 
     # make sure that at least some routes were recommended if the user wanted routes
     if((web_params["difficulty_range"]["route"][0] != -1) and (len(rec_df.index) > 0)):
         # use the same logic as above
         num_routes = rec_df["rock_climb"].sum()
         if(num_routes == 0):
-            notes.append(f"The top {len(rec_df.index)} recommendations are all boulders.")
+            notes.append(f"The top {len(rec_df.index)} recommendations are all boulders. " \
+                "To generate routes, turn off boulders or increase the number of recommendations.")
 
     # return the notes
     return notes
