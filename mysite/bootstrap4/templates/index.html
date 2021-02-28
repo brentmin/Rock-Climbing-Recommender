@@ -165,12 +165,29 @@
             <div class="row" style="margin-top: 5px;">
                 <div class="col-md-2"><a href="https://www.mountainproject.com/route/{{ r.url }}">{{ r.name }}</a></div>
                 <div class="col-md-1">{{ r.difficulty|default:"None" }}</div>
-                <div class="col-md-9">{{ r.description|default:"None" }}</div>
+                <div class="col-md-9" class="js-truncate">{{ r.description|default:"None" }}</div>
             </div>
             {% endfor %}
         </div>
         {% endif %}
     </div>
+
+    <script type="text/javascript">
+        // Code to truncate the descriptions to a certain number of characters
+        // source: https://stackoverflow.com/questions/21447269/how-to-limit-the-length-of-text-in-a-paragraph/21447588
+        function truncateText(text, maxLength) {
+            if (text.length > maxLength) {
+                text = text.substr(0, maxLength) + '...';
+            }
+            return text;
+        }
+
+        // apply the truncateText function to all recommendation descriptions
+        var to_truncate = document.getElementsByClassName("js-truncate")
+        for(var i = 0; i < to_truncate.length; i ++) {
+            to_truncate.innerText = truncateText(to_truncate.item(i).innerText, 600);
+        }
+    </script>
 
     <script type="text/javascript">
         function set_readonly(element, b) {
