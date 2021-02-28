@@ -185,7 +185,8 @@
         // apply the truncateText function to all recommendation descriptions
         var to_truncate = document.getElementsByClassName("js-truncate")
         for(var i = 0; i < to_truncate.length; i ++) {
-            to_truncate.innerText = truncateText(to_truncate.item(i).innerText, 600);
+            description = to_truncate.item(i)
+            description.innerText = truncateText(description.innerText, 600);
         }
     </script>
 
