@@ -165,7 +165,7 @@
             <div class="row" style="margin-top: 5px;">
                 <div class="col-md-2"><a href="https://www.mountainproject.com/route/{{ r.url }}">{{ r.name }}</a></div>
                 <div class="col-md-1">{{ r.difficulty|default:"None" }}</div>
-                <div class="col-md-9" class="js-truncate">{{ r.description|default:"None" }}</div>
+                <div class="col-md-9 js-truncate">{{ r.description|default:"None" }}</div>
             </div>
             {% endfor %}
         </div>
