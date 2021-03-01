@@ -24,19 +24,83 @@ def get_raw_data(data_params):
     raw_data = []
 
     # for now, just scrape Yosemite routes
-    # area_url = "https://www.mountainproject.com/area/105833381/yosemite-national-park"
-    area_url = "https://www.mountainproject.com/area/105905660/jamestown" # only 49 climbs!
-    all_routes = find_all_routes_in_area(area_url)
+    state_urls = ['https://www.mountainproject.com/area/105905173/alabama']
+    # ,
+    #               'https://www.mountainproject.com/area/105909311/alaska',
+    #               'https://www.mountainproject.com/area/105708962/arizona',
+    #               'https://www.mountainproject.com/area/105901027/arkansas',
+    #               'https://www.mountainproject.com/area/105708959/california',
+    #               'https://www.mountainproject.com/area/105708956/colorado',
+    #               'https://www.mountainproject.com/area/105806977/connecticut',
+    #               'https://www.mountainproject.com/area/106861605/delaware',
+    #               'https://www.mountainproject.com/area/111721391/florida',
+    #               'https://www.mountainproject.com/area/105897947/georgia',
+    #               'https://www.mountainproject.com/area/106316122/hawaii',
+    #               'https://www.mountainproject.com/area/105708958/idaho',
+    #               'https://www.mountainproject.com/area/105911816/illinois',
+    #               'https://www.mountainproject.com/area/112389571/indiana',
+    #               'https://www.mountainproject.com/area/106092653/iowa',
+    #               'https://www.mountainproject.com/area/107235316/kansas',
+    #               'https://www.mountainproject.com/area/105868674/kentucky',
+    #               'https://www.mountainproject.com/area/116720343/louisiana',
+    #               'https://www.mountainproject.com/area/105948977/maine',
+    #               'https://www.mountainproject.com/area/106029417/maryland',
+    #               'https://www.mountainproject.com/area/105908062/massachusetts',
+    #               'https://www.mountainproject.com/area/106113246/michigan',
+    #               'https://www.mountainproject.com/area/105812481/minnesota',
+    #               'https://www.mountainproject.com/area/108307056/mississippi',
+    #               'https://www.mountainproject.com/area/105899020/missouri',
+    #               'https://www.mountainproject.com/area/105907492/montana',
+    #               'https://www.mountainproject.com/area/116096758/nebraska',
+    #               'https://www.mountainproject.com/area/105708961/nevada',
+    #               'https://www.mountainproject.com/area/105872225/new-hampshire',
+    #               'https://www.mountainproject.com/area/106374428/new-jersey',
+    #               'https://www.mountainproject.com/area/105708964/new-mexico',
+    #               'https://www.mountainproject.com/area/105800424/new-york',
+    #               'https://www.mountainproject.com/area/105873282/north-carolina',
+    #               'https://www.mountainproject.com/area/106598130/north-dakota',
+    #               'https://www.mountainproject.com/area/105994953/ohio',
+    #               'https://www.mountainproject.com/area/105854466/oklahoma',
+    #               'https://www.mountainproject.com/area/105708965/oregon',
+    #               'https://www.mountainproject.com/area/105913279/pennsylvania',
+    #               'https://www.mountainproject.com/area/106842810/rhode-island',
+    #               'https://www.mountainproject.com/area/107638915/south-carolina',
+    #               'https://www.mountainproject.com/area/105708963/south-dakota',
+    #               'https://www.mountainproject.com/area/105887760/tennessee',
+    #               'https://www.mountainproject.com/area/105835804/texas',
+    #               'https://www.mountainproject.com/area/105708957/utah',
+    #               'https://www.mountainproject.com/area/105891603/vermont',
+    #               'https://www.mountainproject.com/area/105852400/virginia',
+    #               'https://www.mountainproject.com/area/105708966/washington',
+    #               'https://www.mountainproject.com/area/105855459/west-virginia',
+    #               'https://www.mountainproject.com/area/105708968/wisconsin',
+    #               'https://www.mountainproject.com/area/105708960/wyoming']
+    state_names = ["Alabama"]
+    # ,"Alaska", "Arkansas", "Arizona", "California", 
+    #                "Colorado", "Connecticut", "Delaware", "Florida", "Georgia", 
+    #                "Hawaii", "Iowa", "Idaho", "Illinois", "Indiana", "Kansas", 
+    #                "Kentucky", "Louisiana", "Massachusetts", "Maryland", "Maine", 
+    #                "Michigan", "Minnesota", "Missouri", "Mississippi", "Montana", 
+    #                "North Carolina", "North Dakota", "Nebraska", "New Hampshire", 
+    #                "New Jersey", "New Mexico", "Nevada", "New York", "Ohio", 
+    #                "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", 
+    #                "South Carolina", "South Dakota", "Tennessee", "Texas", 
+    #                "Utah", "Virginia", "Vermont", "Washington", "Wisconsin", 
+    #                "West Virginia", "Wyoming"]
+    state_names.sort()
+    states = zip(state_names, state_urls)
+    for state, url in states:
+        all_routes = find_all_routes_in_area(url)
 
-    # for every route in Yosemite, get the route data
-    for route_url in tqdm(all_routes):
-        route_data = get_route_data(route_url)
-        if route_data:
-            raw_data.append(route_data)
+        # for every route in Yosemite, get the route data
+        for route_url in tqdm(all_routes):
+            route_data = get_route_data(route_url)
+            if route_data:
+                raw_data.append(route_data)
 
-    # save the raw data
-    with open(make_absolute(data_params["raw_data_folder"] + "yosemite.json"), "w") as f:
-        json.dump(raw_data, f)
+        # save the raw data
+        with open(make_absolute(data_params["raw_data_folder"] + state+".json"), "w") as f:
+            json.dump(raw_data, f)
 
 def get_route_data(route_url):
     """
@@ -171,39 +235,6 @@ def get_route_rating_data(route_url):
             
     # return the ratings
     return user_ratings
-
-def get_user_history(user_url):
-    """
-    Get all routes this user has climbed
-    Note: this function is not used
-
-    :param:     user_url    The URL of the user profile
-
-    :return:    list        A list containing the url of all climbs this user has rated
-    """
-    # store links here
-    links = []
-
-    # get the html for the user
-    text = requests.get(user_url + '/ticks').text
-    soup = BeautifulSoup(text, 'html.parser')
-
-    # iterate over each page of climbs that the user has done
-    num_pages = int(soup.find_all('a', {"class":"no-click"})[2].contents[0].strip()[-1])
-    for i in range(num_pages):
-        text = requests.get(user + '/ticks?page=' + str(i + 1)).text
-
-        # parse the page of climbs
-        soup = BeautifulSoup(text, 'html.parser')
-
-        # get and store all links to the climbs the user has done
-        all_links = soup.find_all('a')
-        for link in all_links:
-            if len(link.find_all('strong')) > 0 and len(link) < 2:
-                links.append({link.find('strong').contents[0]: link.get('href')})
-
-    # return the list of links
-    return links
 
 def find_all_routes_in_area(area_url):
     """

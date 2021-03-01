@@ -19,38 +19,52 @@ def get_clean_data(data_params):
                                 the location at which to download raw data and the location at which
                                 to save clean data
     """
-    # get the url at which raw data will be found
-    # TODO: sync up the file names between this file and get_raw_data.py
-    raw_data_path = make_absolute(data_params["raw_data_folder"] + "yosemite.json")
-    print(raw_data_path)
-    
-    # get the data
-    with open(raw_data_path, "r") as f:
-        raw_data = json.load(f)
+    state_names = ["Alabama"]
+    # ,"Alaska", "Arkansas", "Arizona", "California", 
+    #                "Colorado", "Connecticut", "Delaware", "Florida", "Georgia", 
+    #                "Hawaii", "Iowa", "Idaho", "Illinois", "Indiana", "Kansas", 
+    #                "Kentucky", "Louisiana", "Massachusetts", "Maryland", "Maine", 
+    #                "Michigan", "Minnesota", "Missouri", "Mississippi", "Montana", 
+    #                "North Carolina", "North Dakota", "Nebraska", "New Hampshire", 
+    #                "New Jersey", "New Mexico", "Nevada", "New York", "Ohio", 
+    #                "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", 
+    #                "South Carolina", "South Dakota", "Tennessee", "Texas", 
+    #                "Utah", "Virginia", "Vermont", "Washington", "Wisconsin", 
+    #                "West Virginia", "Wyoming"]
+    state_names.sort()
+    for state in state_names:
+        # get the url at which raw data will be found
+        # TODO: sync up the file names between this file and get_raw_data.py
+        raw_data_path = make_absolute(data_params["raw_data_folder"] + state+".json")
+        print(raw_data_path)
+        
+        # get the data
+        with open(raw_data_path, "r") as f:
+            raw_data = json.load(f)
 
-    # store all clean data as a list of lists
-    # note that the first input row is the column names
-    climb_data = [["climb_id", "name", "description", "image_url", "latitude", "longitude", 
-        "avg_rating", "num_ratings", "url", "climb_type", "height_ft", "height_m", "pitches",
-        "grade", "protection", "difficulty", 'rock_climb', 'boulder_climb']]
-    user_data = [["user_id", "climb_id", "rating"]]
+        # store all clean data as a list of lists
+        # note that the first input row is the column names
+        climb_data = [["climb_id", "name", "description", "image_url", "latitude", "longitude", 
+            "avg_rating", "num_ratings", "url", "climb_type", "height_ft", "height_m", "pitches",
+            "grade", "protection", "difficulty", 'rock_climb', 'boulder_climb']]
+        #user_data = [["user_id", "climb_id", "rating"]]
 
-    # process the data
-    for climb in raw_data:
-        # get the climb/user data and add it to the list of lists
-        climb_row, user_rows = split_into_user_climb(climb)
-        climb_data.append(climb_row)
-        for user_row in user_rows:
-            user_data.append(user_row)
+        # process the data
+        for climb in raw_data:
+            # get the climb/user data and add it to the list of lists
+            climb_row = split_into_user_climb(climb)
+            climb_data.append(climb_row)
+            #for user_row in user_rows:
+            #    user_data.append(user_row)
 
-    # save the lists of lists as csv data in the proper location
-    clean_data_path = str(make_absolute(data_params["clean_data_folder"])) + "/"
-    with open(clean_data_path + "climbs.csv", "w", encoding="utf-8", newline="") as f:
-        writer = csv.writer(f)
-        writer.writerows(climb_data)
-    with open(clean_data_path + "users.csv", "w", encoding="utf-8", newline="") as f:
-        writer = csv.writer(f)
-        writer.writerows(user_data)
+        # save the lists of lists as csv data in the proper location
+        clean_data_path = str(make_absolute(data_params["clean_data_folder"])) + "/"
+        with open(clean_data_path + state+"_climbs.csv", "w", encoding="utf-8", newline="") as f:
+            writer = csv.writer(f)
+            writer.writerows(climb_data)
+        #with open(clean_data_path + "users.csv", "w", encoding="utf-8", newline="") as f:
+            #writer = csv.writer(f)
+            #writer.writerows(user_data)
 
 def roman_to_int(s):
     rom_val = {'I': 1, 'V': 5, 'X': 10, 'L': 50, 'C': 100, 'D': 500, 'M': 1000}
@@ -145,9 +159,9 @@ def split_into_user_climb(climb_dict):
         difficulty, rock, boulder]
 
     # all the info for the user row
-    user_rows = list(map(list, climb_dict["user_ratings"].items()))
-    for user_row in user_rows:
-        user_row.insert(1, climb_id)
+    # user_rows = list(map(list, climb_dict["user_ratings"].items()))
+    #for user_row in user_rows:
+    #    user_row.insert(1, climb_id)
 
     # return the info as a tuple
-    return (climb_row, user_rows)
+    return climb_row
