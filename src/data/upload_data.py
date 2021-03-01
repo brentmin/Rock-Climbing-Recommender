@@ -13,7 +13,7 @@ from src.functions import *
 
 def upload_data(data_params, my_client):
     #uploads the cleaned climbs data to MondoDB
-    state_names = ["Alabama"]
+    state_names = ["Arizona", "Utah"]
     # ,"Alaska", "Arkansas", "Arizona", "California", 
     #                "Colorado", "Connecticut", "Delaware", "Florida", "Georgia", 
     #                "Hawaii", "Iowa", "Idaho", "Illinois", "Indiana", "Kansas", 
@@ -29,8 +29,8 @@ def upload_data(data_params, my_client):
     for state in state_names:
         climbs = my_client.MountainProject.climbs
         climbs_data_path = make_absolute(data_params["clean_data_folder"] + state + '_climbs.csv')
-        with open(climbs_data_path) as f:
-            climbs_df = pd.read_csv(f)
+        with open(climbs_data_path, encoding="utf-8") as f:
+            climbs_df = pd.read_csv(f, encoding="utf-8")
             climbs_data = climbs_df.to_dict('records')
         for entry in climbs_data:
             climbs.replace_one(entry, entry, upsert=True)
