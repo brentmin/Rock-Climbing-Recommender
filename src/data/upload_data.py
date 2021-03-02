@@ -8,12 +8,14 @@ import json
 import csv
 import pandas as pd
 
+from tqdm import tqdm
+
 from pymongo import MongoClient
 from src.functions import *
 
 def upload_data(data_params, my_client):
     #uploads the cleaned climbs data to MondoDB
-    state_names = ["Arizona", "Utah"]
+    state_names = ["Connecticut"]
     # ,"Alaska", "Arkansas", "Arizona", "California", 
     #                "Colorado", "Connecticut", "Delaware", "Florida", "Georgia", 
     #                "Hawaii", "Iowa", "Idaho", "Illinois", "Indiana", "Kansas", 
@@ -32,5 +34,5 @@ def upload_data(data_params, my_client):
         with open(climbs_data_path, encoding="utf-8") as f:
             climbs_df = pd.read_csv(f, encoding="utf-8")
             climbs_data = climbs_df.to_dict('records')
-        for entry in climbs_data:
+        for entry in tqdm(climbs_data):
             climbs.replace_one(entry, entry, upsert=True)

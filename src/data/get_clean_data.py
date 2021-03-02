@@ -19,7 +19,7 @@ def get_clean_data(data_params):
                                 the location at which to download raw data and the location at which
                                 to save clean data
     """
-    state_names = ["Alabama"]
+    state_names = ["Connecticut"]
     # ,"Alaska", "Arkansas", "Arizona", "California", 
     #                "Colorado", "Connecticut", "Delaware", "Florida", "Georgia", 
     #                "Hawaii", "Iowa", "Idaho", "Illinois", "Indiana", "Kansas", 

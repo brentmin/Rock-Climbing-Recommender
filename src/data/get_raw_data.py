@@ -24,7 +24,7 @@ def get_raw_data(data_params):
     raw_data = []
 
     # for now, just scrape Yosemite routes
-    state_urls = ['https://www.mountainproject.com/area/105905173/alabama']
+    state_urls = ['https://www.mountainproject.com/area/105806977/connecticut']
     # ,
     #               'https://www.mountainproject.com/area/105909311/alaska',
     #               'https://www.mountainproject.com/area/105708962/arizona',
@@ -75,7 +75,7 @@ def get_raw_data(data_params):
     #               'https://www.mountainproject.com/area/105855459/west-virginia',
     #               'https://www.mountainproject.com/area/105708968/wisconsin',
     #               'https://www.mountainproject.com/area/105708960/wyoming']
-    state_names = ["Alabama"]
+    state_names = ["Connecticut"]
     # ,"Alaska", "Arkansas", "Arizona", "California", 
     #                "Colorado", "Connecticut", "Delaware", "Florida", "Georgia", 
     #                "Hawaii", "Iowa", "Idaho", "Illinois", "Indiana", "Kansas", 

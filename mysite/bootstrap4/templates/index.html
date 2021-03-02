@@ -40,13 +40,13 @@
             width: 70%;
         }
         #id_latitude {
-            width: 100px;
+            width: 80px;
         }
         #id_longitude {
-            width: 100px;
+            width: 80px;
         }
         #id_max_distance {
-            width: 80px;
+            width: 36px;
         }
         label[for=id_num_recs] {
             margin-bottom: 0px;
@@ -93,7 +93,7 @@
     <div class="text-center bg-white">
         <!-- Nav bar and title -->
         <div class="container">
-            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <nav class="navbar navbar-expand-lg navbar-light bg-light" style="margin: 0;">
                 <a class="navbar-brand" href="#" style="padding: 20px 20px;"><span id="title">OnSight</span></a>
                 <div class="collapse navbar-collapse">
                     <div class="navbar-nav" style="padding: 20px 20px;">
@@ -105,6 +105,7 @@
                     </div>
                 </div>
             </nav>
+            <div class="text-left" style="margin-bottom: 30px; margin-left: 30px">Outdoor Rock Climbing Recommendations</div>
         </div>
 
         <!-- Recommendation input -->
@@ -114,29 +115,38 @@
             <!-- Custom bs4 grid for form layout -->
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-md-12">{{ form.url.label_tag }} {{ form.url }}</div>
-                </div>
-                <div class="row">
-                    <div class="col-md-3">{{ form.latitude.label_tag }} {{ form.latitude }}</div>
-                    <div class="col-md-3">{{ form.longitude.label_tag }} {{ form.longitude }}</div>
-                    <div class="col-md-3">{{ form.max_distance.label_tag }} {{ form.max_distance }}</div>
-                    <div class="col-md-3">{{ form.num_recs.label_tag }}</div>
-                </div>
-                <div class="row">
-                    <div class="col-md-9">
-                        <input type="text" id="pac-input" class="controls", placeholder="Search Box">
-                        <div id="googleMap" style="width:100%;height:450px;"></div>
+                    <div class="col-md-3 text-left">
+                        <p><b>Usage Instructions:</b></p>
+                        <p>The Mountain Project URL is only required if you desire personalized recommendations. The Mountain Project URL can be found be logging into <a href="https://www.mountainproject.com" target="_blank" rel="noopener noreferrer">Mountain Project</a>, clicking on your profile picture in the top right, then clicking on "Your Page".</p>
+                        <p>For location we recommend you use the search bar on the map, but you can also manually type in latitude/longitude.</p>
+                        <p>For difficulties, select what type(s) of climbs you want and enter in the difficulty range. If you are confused about what "V_" and "5._" mean, REI has an amazing article about climbing difficulty <a href="https://www.rei.com/learn/expert-advice/climbing-bouldering-rating.html" target="_blank" rel="noopener noreferrer">here</a>.</p>
+                        <p>Finally, recommendations will appear below the map when the submit button is clicked.</p>
                     </div>
-                    <div class="col-md-3">
-                        <div class="short-div">{{ form.num_recs }}</div>
-                        <div class="short-div" id="boulder-check">{{ form.get_boulder.label_tag }} {{ form.get_boulder }}</div>
-                        <div class="short-div">{{ form.boulder_lower.label_tag }} {{ form.boulder_lower }}</div>
-                        <div class="short-div">{{ form.boulder_upper.label_tag }} {{ form.boulder_upper }}</div>
-                        <div class="short-div" id="route-check">{{ form.get_route.label_tag }} {{ form.get_route }}</div>
-                        <div class="short-div">{{ form.route_lower.label_tag }} {{ form.route_lower }}</div>
-                        <div class="short-div">{{ form.route_upper.label_tag }} {{ form.route_upper }}</div>
-                        <div class="short-div" id="rec-box">{{ form.rec.label_tag }} {{ form.rec }}</div>
-                        <div class="short-div"><button type="submit" name="run_script" id="submit-button">Submit</button></div>
+                    <div class="col-md-9">
+                        <div class="row">
+                            <div class="col-md-12">{{ form.url.label_tag }} {{ form.url }}</div>
+                        </div>
+                        <div class="row" style="display: flex; align-items: center;">
+                            <div class="col-md-3">{{ form.latitude.label_tag }} {{ form.latitude }}</div>
+                            <div class="col-md-3">{{ form.longitude.label_tag }} {{ form.longitude }}</div>
+                            <div class="col-md-3">{{ form.max_distance.label_tag }} {{ form.max_distance }}</div>
+                            <div class="col-md-3">{{ form.num_recs.label_tag }}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-9">
+                                <input type="text" id="pac-input" class="controls", placeholder="Search Box">
+                                <div id="googleMap" style="width:100%;height:400px;"></div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="short-div">{{ form.num_recs }}</div>
+                                <div class="short-div" id="boulder-check">{{ form.get_boulder.label_tag }} {{ form.get_boulder }}</div>
+                                <div class="short-div">{{ form.boulder_lower.label_tag }} {{ form.boulder_lower }} - {{ form.boulder_upper.label_tag }} {{ form.boulder_upper }}</div>
+                                <div class="short-div" id="route-check">{{ form.get_route.label_tag }} {{ form.get_route }}</div>
+                                <div class="short-div">{{ form.route_lower.label_tag }} {{ form.route_lower }} - {{ form.route_upper.label_tag }} {{ form.route_upper }}</div>
+                                <div class="short-div" id="rec-box">{{ form.rec.label_tag }} {{ form.rec }}</div>
+                                <div class="short-div"><button type="submit" name="run_script" id="submit-button">Submit</button></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

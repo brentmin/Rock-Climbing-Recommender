@@ -79,7 +79,8 @@ def bootstrap4_index(request):
 
         return render(request, 'index.html', template(form))
 
-    form = RecInputForm()
+    # note on opening the website, set the initial recommender to be top_pop
+    form = RecInputForm(initial={"rec": "top_pop"})
     return render(request, 'index.html', template(form))
 
 def secondary_validation(form):  
