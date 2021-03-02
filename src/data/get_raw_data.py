@@ -139,7 +139,7 @@ def get_route_data(route_url):
 
     #difficulty rating and difficulty rating system sections
     difficulty_section = soup.find('h2', {'class': 'inline-block mr-2'})
-    if difficulty_section is None or len(difficulty_section) == 0::
+    if difficulty_section is None or len(difficulty_section) == 0:
         difficulty_rating = 'NA'
         difficulty_rating_system = 'NA'
     else:
