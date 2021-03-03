@@ -54,14 +54,18 @@ def cosine_rec(args=None, data_params=None, web_params=None):
     #get user's past rating data
     user = web_params['user_url']
     history = get_user_history(user)
+
     #routes the user has completed that are also in our DB
     user_df = pd.DataFrame(history)
     merged_df = user_df.merge(df_filtered, how='inner', on=['name', 'url'])
+
     #defining favorite as highest rated
     fav_routes = merged_df[merged_df['user_rating'] == merged_df['user_rating'].max()]
+
     #only look at the numerical attributes so far (will create more later)
     fav_routes_selected_attributes = fav_routes[['latitude', 'longitude', 'avg_rating', 'num_ratings', 'height_ft', 'height_m', 'pitches', 'grade', 'difficulty']]
     df_selected_attributes = df_filtered[['latitude', 'longitude', 'avg_rating', 'num_ratings', 'height_ft', 'height_m', 'pitches', 'grade', 'difficulty']]
+
     #cosine similarity function
     def find_similarity(x, current_row):
         output = pd.DataFrame(columns=['row', 'similarity_score', 'similar_to'])
@@ -70,10 +74,12 @@ def cosine_rec(args=None, data_params=None, web_params=None):
             if similarity_score < 1: #so that you don't recommend yourself
                 output.loc[len(output.index)] = [index, similarity_score, current_row]
         return output
+
     #find row indicies in the database where the similarity scores are highest
     output = pd.DataFrame(columns=['row', 'similarity_score', 'similar_to'])
     for index, row in fav_routes_selected_attributes.iterrows():
         output = output.append(find_similarity([row.tolist()], index), ignore_index=True)
+        
     #only output the top N recommendations
     output = output.sort_values(by='similarity_score', ascending=False)[:web_params['num_recs']]
     
