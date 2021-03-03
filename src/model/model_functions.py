@@ -125,10 +125,10 @@ def filter_df(df, location, distance, diff_ranges):
     # now filter by location
     df["dis_mi"] = df.apply(lambda x: distance_lat_lng(location, (x["latitude"], x["longitude"])), 
         axis=1)
-    df = df.loc[df["dis_mi"] <= distance]
+    df = df[df["dis_mi"] <= distance]
 
     # ensure that there are no duplicate entries
-    df = df.drop_duplicates(subset=["climb_id"])
+    df = df.drop_duplicates(subset=["name"])
 
     # return the filtered df
     return df
