@@ -45,32 +45,11 @@ def cosine_rec(args=None, data_params=None, web_params=None):
 
     # cleans the data
     df = df.fillna(-1)
-    df['climb_type'] = df['climb_type'].apply(lambda x: x.strip('][').split(', '))
+    df['climb_type'] = df['climb_type'].apply(lambda x: x.strip('][').split(', '))   
 
-    # filter by location
-    def calc_distance(x):
-        # approximate radius of earth in km
-        R = 6373.0
-        lat1 = radians(web_params['location'][0])
-        lon1 = radians(web_params['location'][1])
-        lat2 = radians(x['latitude'])
-        lon2 = radians(x['longitude'])
-        dlon = lon2 - lon1
-        dlat = lat2 - lat1
-        a = sin(dlat / 2)**2 + cos(lat1) * cos(lat2) * sin(dlon / 2)**2
-        c = 2 * atan2(sqrt(a), sqrt(1 - a))
-        distance = R * c * 0.621371 #convert to miles by multiplying by 0.621371
-        return distance
-    df_filtered = df[df.apply(calc_distance, axis=1) <= web_params['max_distance']]
-    
-    # filter by type of climb and difficulty
-    def type_and_difficulty_check(x):
-        if x['boulder_climb'] == 1 and x['difficulty'] >= web_params['difficulty_range']['boulder'][0] and x['difficulty'] <= web_params['difficulty_range']['boulder'][1]:
-            return True
-        if x['rock_climb'] == 1 and x['difficulty'] >= web_params['difficulty_range']['route'][0] and x['difficulty'] <= web_params['difficulty_range']['route'][1]:
-            return True
-        return False
-    df_filtered = df_filtered[df_filtered.apply(type_and_difficulty_check, axis=1)]
+    # filter the df based on the web params
+    df = filter_df(df, web_params["location"], web_params["max_distance"], 
+        web_params["difficulty_range"])
 
     #get user's past rating data
     user = web_params['user_url']
