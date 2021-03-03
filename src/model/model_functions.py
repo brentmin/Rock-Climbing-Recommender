@@ -100,7 +100,7 @@ def row_to_difficulty(row):
 def filter_df(df, location, distance, diff_ranges):
     """
     This function filters the input df based on the other three paramters, using the functions 
-    below
+    below. This function additionally serves as a check to make sure duplicate entires do not exist
 
     :param:     df              The input df to filter. It is expected at minimum to have the 
                                 columns "latitude", "longitude", "boulder_climb", "rock_climb", 
@@ -126,6 +126,9 @@ def filter_df(df, location, distance, diff_ranges):
     df["dis_mi"] = df.apply(lambda x: distance_lat_lng(location, (x["latitude"], x["longitude"])), 
         axis=1)
     df = df.loc[df["dis_mi"] <= distance]
+
+    # ensure that there are no duplicate entries
+    df = df.drop_duplicates(subset=["climb_id"])
 
     # return the filtered df
     return df
