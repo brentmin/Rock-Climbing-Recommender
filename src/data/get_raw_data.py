@@ -102,6 +102,9 @@ def get_raw_data(data_params):
         with open(make_absolute(data_params["raw_data_folder"] + state+".json"), "w") as f:
             json.dump(raw_data, f)
 
+        # after saving the raw data, clear the raw data list
+        raw_data = []
+
 def get_route_data(route_url):
     """
     Get all route data for a single route
