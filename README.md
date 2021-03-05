@@ -14,7 +14,7 @@ To run the project, every command must start with "python run.py" from the root 
 
 |Flag|Type|Default Value|Description|
 |-|-|-|-|
-|-d, --data|bool|False|Use this flag to run all data scraping code. Be warned that using this flag will first delete **ALL** raw and cleaned data, before downloading new raw data.|
+|-d, --data|bool|False|Use this flag to run all data scraping code. This will take a very long time, upwards of 48 hours total to get all the data. It is recommended *not* to run this. Be warned that using this flag will first delete **ALL** raw and cleaned data, before downloading new raw data. |
 |-c, --clean|bool|False|Use this flag to run all data cleaning code. Be warned that using this flag will first delete **ALL** raw and cleaned data, before processing raw data into cleaned data.|
 |-p, --top-pop|bool|False|Use this flag to return the top 10 most popular/well received as a csv.|
 |-\-data-config|str|"config/data_params.json"|The location at which data parameters can be found|
