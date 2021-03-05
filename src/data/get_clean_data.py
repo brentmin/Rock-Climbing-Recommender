@@ -19,18 +19,18 @@ def get_clean_data(data_params):
                                 the location at which to download raw data and the location at which
                                 to save clean data
     """
-    state_names = ["Connecticut"]
-    # ,"Alaska", "Arkansas", "Arizona", "California", 
-    #                "Colorado", "Connecticut", "Delaware", "Florida", "Georgia", 
-    #                "Hawaii", "Iowa", "Idaho", "Illinois", "Indiana", "Kansas", 
-    #                "Kentucky", "Louisiana", "Massachusetts", "Maryland", "Maine", 
-    #                "Michigan", "Minnesota", "Missouri", "Mississippi", "Montana", 
-    #                "North Carolina", "North Dakota", "Nebraska", "New Hampshire", 
-    #                "New Jersey", "New Mexico", "Nevada", "New York", "Ohio", 
-    #                "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", 
-    #                "South Carolina", "South Dakota", "Tennessee", "Texas", 
-    #                "Utah", "Virginia", "Vermont", "Washington", "Wisconsin", 
-    #                "West Virginia", "Wyoming"]
+    state_names = ["Alabama" ,"Alaska", "Arkansas", "Arizona", "California", 
+                   "Colorado", "Connecticut", "Delaware", "Florida", "Georgia", 
+                   "Hawaii", "Iowa", "Idaho", "Illinois", "Indiana", "Kansas", 
+                   "Kentucky", "Louisiana", "Massachusetts", "Maryland", "Maine", 
+                   "Michigan", "Minnesota", "Missouri", "Mississippi", "Montana", 
+                   "North Carolina", "North Dakota", "Nebraska", "New Hampshire", 
+                   "New Jersey", "New Mexico", "Nevada", "New York", "Ohio", 
+                   "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", 
+                   "South Carolina", "South Dakota", "Tennessee", "Texas", 
+                   "Utah", "Virginia", "Vermont", "Washington", "Wisconsin", 
+                   "West Virginia", "Wyoming"]
+
     state_names.sort()
     for state in state_names:
         # get the url at which raw data will be found
@@ -117,6 +117,7 @@ def split_into_user_climb(climb_dict):
         "10a", "10b", "10c", "10d", "11a", "11b", "11c", "11d", "12a", "12b", "12c", "12d", "13a", 
         "13b", "13c", "13d", "14a", "14b", "14c", "14d", "15a", "15b", "15c", "15d"]
     route_str = climb_dict['difficulty_rating'].strip()
+    
     #if it's a normal rock climbing route
     if route_str[0] != 'V':
         if '.' in route_str:
