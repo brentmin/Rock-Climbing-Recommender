@@ -34,9 +34,17 @@ def top_pop(args=None, data_params=None, web_params=None):
     # access MongoDb
     client = MongoClient('mongodb+srv://DSC102:coliniscool@cluster0.4gstr.mongodb.net/MountainProject?retryWrites=true&w=majority&ssl=true&ssl_cert_reqs=CERT_NONE')
     
+    #set the query range
+    #1 latitude ~= 69 miles
+    #1 longitude ~= 54.6 miles
+    latitude_min = web_params[0] - 69 * web_params['max_distance']
+    latitude_max = web_params[0] + 69 * web_params['max_distance']
+    longitude_min = web_params[1] - 54.6 * web_params['max_distance']
+    longitude_max = web_params[1] + 54.6 * web_params['max_distance']
+
     # get the data
     climbs = client.MountainProject.climbs
-    df = pd.DataFrame.from_records(list(climbs.find()))
+    df = pd.DataFrame.from_records(list(climbs.find({"latitude": {"$gte": latitude_min, "$lte": latitude_max}, "longitude": {"$gte": longitude_min, "$lte": longitude_max}})))
 
     # cleans the data
     df['climb_type'] = df['climb_type'].apply(lambda x: x.strip('][').split(', '))
