@@ -33,16 +33,16 @@ def cosine_rec(args=None, data_params=None, web_params=None):
     #set the query range
     #1 latitude ~= 69 miles
     #1 longitude ~= 54.6 miles
-    latitude_min = float(web_params["location"][0]) - 69 * float(web_params['max_distance'])
-    latitude_max = float(web_params["location"][0]) + 69 * float(web_params['max_distance'])
-    longitude_min = float(web_params["location"][1]) - 54.6 * float(web_params['max_distance'])
-    longitude_max = float(web_params["location"][1]) + 54.6 * float(web_params['max_distance'])
+    latitude_min = float(web_params["location"][0]) - float(web_params['max_distance']) / 69
+    latitude_max = float(web_params["location"][0]) + float(web_params['max_distance']) / 69
+    longitude_min = float(web_params["location"][1]) - float(web_params['max_distance']) / 54.6
+    longitude_max = float(web_params["location"][1]) + float(web_params['max_distance']) / 54.6
 
     # get the data
     climbs = client.MountainProject.climbs
     filtered_climbs = climbs.find({"latitude": {"$gte": latitude_min, "$lte": latitude_max}, "longitude": {"$gte": longitude_min, "$lte": longitude_max}})
     df = pd.DataFrame.from_records(list(filtered_climbs))
-    
+
     # cleans the data
     df = df.fillna(-1)
     df['climb_type'] = df['climb_type'].apply(lambda x: x.strip('][').split(', '))   
