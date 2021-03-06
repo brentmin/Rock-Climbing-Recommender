@@ -33,10 +33,10 @@ def cosine_rec(args=None, data_params=None, web_params=None):
     #set the query range
     #1 latitude ~= 69 miles
     #1 longitude ~= 54.6 miles
-    latitude_min = web_params["location"][0] - 69 * web_params['max_distance']
-    latitude_max = web_params["location"][0] + 69 * web_params['max_distance']
-    longitude_min = web_params["location"][1] - 54.6 * web_params['max_distance']
-    longitude_max = web_params["location"][1] + 54.6 * web_params['max_distance']
+    latitude_min = float(web_params["location"][0]) - 69 * float(web_params['max_distance'])
+    latitude_max = float(web_params["location"][0]) + 69 * float(web_params['max_distance'])
+    longitude_min = float(web_params["location"][1]) - 54.6 * float(web_params['max_distance'])
+    longitude_max = float(web_params["location"][1]) + 54.6 * float(web_params['max_distance'])
 
     # get the data
     climbs = client.MountainProject.climbs
