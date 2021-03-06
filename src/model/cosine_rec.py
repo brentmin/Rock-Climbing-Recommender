@@ -40,8 +40,9 @@ def cosine_rec(args=None, data_params=None, web_params=None):
 
     # get the data
     climbs = client.MountainProject.climbs
-    df = pd.DataFrame.from_records(list(climbs.find({"latitude": {"$gte": latitude_min, "$lte": latitude_max}, "longitude": {"$gte": longitude_min, "$lte": longitude_max}})))
-
+    filtered_climbs = climbs.find({"latitude": {"$gte": latitude_min, "$lte": latitude_max}, "longitude": {"$gte": longitude_min, "$lte": longitude_max}})
+    df = pd.DataFrame.from_records(list(filtered_climbs))
+    
     # cleans the data
     df = df.fillna(-1)
     df['climb_type'] = df['climb_type'].apply(lambda x: x.strip('][').split(', '))   
