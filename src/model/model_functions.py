@@ -10,6 +10,8 @@ from pymongo import MongoClient
 
 import math
 
+import time
+
 def get_mongo_data(web_params):
     """
     Get data from mongo based on the web params. This function is mostly here to limit the amount
@@ -167,6 +169,9 @@ def filter_df(df, location, distance, diff_ranges):
     # an exception is raised when you try to apply from an empty df
     if(len(df.index) == 0):
         return df
+
+    # disable a warning that does not apply here
+    pd.options.mode.chained_assignment = None
 
     # now filter by location
     df["dis_mi"] = df.apply(lambda x: distance_lat_lng(location, (x["latitude"], x["longitude"])), 
