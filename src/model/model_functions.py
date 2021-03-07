@@ -32,10 +32,10 @@ def get_mongo_data(web_params):
     lng_distance = (web_params["max_distance"] / 54.6) * 1.05
 
     # then get the min/max lat/lng values that form the square
-    lat_min = web_params["location"][0] - lat_distance
-    lat_max = web_params["location"][0] + lat_distance
-    lng_min = web_params["location"][1] - lng_distance
-    lng_max = web_params["location"][1] + lng_distance
+    lat_min = float(web_params["location"][0]) - lat_distance
+    lat_max = float(web_params["location"][0]) + lat_distance
+    lng_min = float(web_params["location"][1]) - lng_distance
+    lng_max = float(web_params["location"][1]) + lng_distance
 
     # then query mongo with these parameters
     climbs = client.MountainProject.climbs
