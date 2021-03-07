@@ -9,7 +9,7 @@ import pandas as pd
 from pymongo import MongoClient
 
 from src.functions import make_absolute
-from src.model.model_functions import filter_df, format_df, generate_notes
+from src.model.model_functions import get_mongo_data, format_df, generate_notes
 
 from math import sin, cos, sqrt, atan2, radians
 
@@ -31,31 +31,11 @@ def top_pop(args=None, data_params=None, web_params=None):
                                 Where each item in the "recommendations" list is a singular 
                                 recommendation. All recommenders should return in this format
     """
-    # access MongoDb
-    client = MongoClient('mongodb+srv://DSC102:coliniscool@cluster0.4gstr.mongodb.net/MountainProject?retryWrites=true&w=majority&ssl=true&ssl_cert_reqs=CERT_NONE')
-    
-    #set the query range
-    #1 latitude ~= 69 miles
-    #1 longitude ~= 54.6 miles
-    latitude_min = float(web_params["location"][0]) - float(web_params['max_distance']) / 69
-    latitude_max = float(web_params["location"][0]) + float(web_params['max_distance']) / 69
-    longitude_min = float(web_params["location"][1]) - float(web_params['max_distance']) / 54.6
-    longitude_max = float(web_params["location"][1]) + float(web_params['max_distance']) / 54.6
-
-    # get the data
-    climbs = client.MountainProject.climbs
-    filtered_climbs = climbs.find({"latitude": {"$gte": latitude_min, "$lte": latitude_max}, "longitude": {"$gte": longitude_min, "$lte": longitude_max}})
-    df = pd.DataFrame.from_records(list(filtered_climbs))
-
-    # cleans the data
-    df['climb_type'] = df['climb_type'].apply(lambda x: x.strip('][').split(', '))
+    # get filtered data from mongo based on the input web params
+    df = get_mongo_data(web_params)
 
     # do a simple top popular
     toppop = df[df['avg_rating'] >= 3.5].sort_values('num_ratings', ascending=False)
-
-    # filter based on params from the web app
-    toppop = filter_df(toppop, web_params["location"], web_params["max_distance"], 
-        web_params["difficulty_range"])
 
     # get however many recommendations are requested
     toppop = toppop[:web_params["num_recs"]]

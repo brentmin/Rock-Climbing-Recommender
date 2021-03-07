@@ -6,7 +6,53 @@
 
 import pandas as pd
 
+from pymongo import MongoClient
+
 import math
+
+def get_mongo_data(web_params):
+    """
+    Get data from mongo based on the web params. This function is mostly here to limit the amount
+    of data being transfered, and to collate logic across different models
+
+    :param:     web_params      Paramters from the website. Only needed ones are location
+
+    :return:    pd.df       A pandas DataFrame containing approximate data for the users requested
+                            location.
+    """
+    # get a connection to mongo
+    client = MongoClient('mongodb+srv://DSC102:coliniscool@cluster0.4gstr.mongodb.net/MountainProject?retryWrites=true&w=majority&ssl=true&ssl_cert_reqs=CERT_NONE')
+
+    # create an approximation lat/lng square from the web params
+    
+    # first convert the maximum distance to approximate lat/lng differences, with a 5% margin of
+    # error
+    # note 1 degree lat ~= 69 miles, and 1 degree lng ~= 54.9 miles
+    lat_distance = (web_params["max_distance"] / 69) * 1.05
+    lng_distance = (web_params["max_distance"] / 54.6) * 1.05
+
+    # then get the min/max lat/lng values that form the square
+    lat_min = web_params["location"][0] - lat_distance
+    lat_max = web_params["location"][0] + lat_distance
+    lng_min = web_params["location"][1] - lng_distance
+    lng_max = web_params["location"][1] + lng_distance
+
+    # then query mongo with these parameters
+    climbs = client.MountainProject.climbs
+    climbs = climbs.find({"latitude": {"$gte": lat_min, "$lte": lat_max}, 
+        "longitude": {"$gte": lng_min, "$lte": lng_max}})
+    df = pd.DataFrame.from_records(list(climbs))
+
+    # do some basic cleaning 
+    df = df.fillna(-1)
+    df['climb_type'] = df['climb_type'].apply(lambda x: x.strip('][').split(', '))   
+
+    # filter based on the rest of the web params
+    df = filter_df(df, web_params["location"], web_params["max_distance"], 
+        web_params["difficulty_range"])
+
+    # return the df
+    return df
 
 def generate_notes(rec_df, web_params):
     """

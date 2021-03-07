@@ -17,7 +17,7 @@ import requests
 from bs4 import BeautifulSoup, Tag
 import json
 
-from src.model.model_functions import filter_df, format_df, generate_notes
+from src.model.model_functions import get_mongo_data, format_df, generate_notes
 
 def cosine_rec(args=None, data_params=None, web_params=None):
     """
@@ -27,29 +27,8 @@ def cosine_rec(args=None, data_params=None, web_params=None):
     :param:     data_params     TODO
     :param:     web_params      TODO
     """
-    # accessing the data from our MongoDB
-    client = MongoClient('mongodb+srv://DSC102:coliniscool@cluster0.4gstr.mongodb.net/MountainProject?retryWrites=true&w=majority&ssl=true&ssl_cert_reqs=CERT_NONE')
-    
-    #set the query range
-    #1 latitude ~= 69 miles
-    #1 longitude ~= 54.6 miles
-    latitude_min = float(web_params["location"][0]) - float(web_params['max_distance']) / 69
-    latitude_max = float(web_params["location"][0]) + float(web_params['max_distance']) / 69
-    longitude_min = float(web_params["location"][1]) - float(web_params['max_distance']) / 54.6
-    longitude_max = float(web_params["location"][1]) + float(web_params['max_distance']) / 54.6
-
-    # get the data
-    climbs = client.MountainProject.climbs
-    filtered_climbs = climbs.find({"latitude": {"$gte": latitude_min, "$lte": latitude_max}, "longitude": {"$gte": longitude_min, "$lte": longitude_max}})
-    df = pd.DataFrame.from_records(list(filtered_climbs))
-
-    # cleans the data
-    df = df.fillna(-1)
-    df['climb_type'] = df['climb_type'].apply(lambda x: x.strip('][').split(', '))   
-
-    # filter the df based on the web params
-    df_filtered = filter_df(df, web_params["location"], web_params["max_distance"], 
-        web_params["difficulty_range"])
+    # get filtered data from mongo based on the input web params
+    df = get_mongo_data(web_params)
 
     #get user's past rating data
     user = web_params['user_url']
@@ -57,14 +36,16 @@ def cosine_rec(args=None, data_params=None, web_params=None):
 
     #routes the user has completed that are also in our DB
     user_df = pd.DataFrame(history)
-    merged_df = user_df.merge(df_filtered, how='inner', on=['name', 'url'])
+    merged_df = user_df.merge(df, how='inner', on=['name', 'url'])
 
     #defining favorite as highest rated
     fav_routes = merged_df[merged_df['user_rating'] == merged_df['user_rating'].max()]
 
     #only look at the numerical attributes so far (will create more later)
-    fav_routes_selected_attributes = fav_routes[['latitude', 'longitude', 'avg_rating', 'num_ratings', 'height_ft', 'height_m', 'pitches', 'grade', 'difficulty']]
-    df_selected_attributes = df_filtered[['latitude', 'longitude', 'avg_rating', 'num_ratings', 'height_ft', 'height_m', 'pitches', 'grade', 'difficulty']]
+    attributes = ['latitude', 'longitude', 'avg_rating', 'num_ratings', 'height_ft', 'height_m', 
+        'pitches', 'grade', 'difficulty']
+    fav_routes_selected_attributes = fav_routes[attributes]
+    df_selected_attributes = df[attributes]
 
     #cosine similarity function
     def find_similarity(x, current_row):
@@ -84,7 +65,7 @@ def cosine_rec(args=None, data_params=None, web_params=None):
     output = output.sort_values(by='similarity_score', ascending=False)[:web_params['num_recs']]
     
     #final list of recommendations with however many recommendations are requested
-    final = df.iloc[output['row']][:web_params["num_recs"]]
+    final = df.loc[output['row']]
 
     # generate any generic notes
     notes = generate_notes(final, web_params)
