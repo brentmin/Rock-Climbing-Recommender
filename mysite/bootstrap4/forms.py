@@ -13,8 +13,8 @@ class RecInputForm(NoColon):
     max_distance = forms.IntegerField(label="Max Distance (mi):", initial=50, min_value=1)
     rec = forms.MultipleChoiceField(label="Recommenders:", choices=(
         ("top_pop", "Top Popular"),
-        ('cosine_rec', 'Cosine Similarity'),
-        ("debug", "Debug (show I/O)"),))
+        ('cosine_rec', 'Personalized'),))
+        # ("debug", "Debug (show I/O)"),))
     num_recs = forms.IntegerField(label="Number of Recommendations:", initial=10, min_value=1)
     boulder_lower = forms.IntegerField(label="V", min_value=0, max_value=16, 
         initial=0)
