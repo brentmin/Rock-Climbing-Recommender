@@ -56,6 +56,31 @@ def get_mongo_data(web_params):
     # return the df
     return df
 
+def get_mongo_user_data(climb_ids):
+    """
+    Get data from mongo based on the climb_ids. This function is mostly here to limit the amount
+    of data being transfered, and to collate logic across different models
+
+    :param:     climb_ids      A list of climb IDs
+
+    :return:    pd.df       A pandas DataFrame containing approximate data for the users requested
+                            location.
+    """
+    # get a connection to mongo
+    client = MongoClient('mongodb+srv://DSC102:Kw4ngOgiLl6mPi5r@cluster0.4gstr.mongodb.net/MountainProject?retryWrites=true&w=majority')
+
+    # then query mongo with these parameters
+    climbs = client.MountainProject.climbs
+    climbs = climbs.find({"climb_id": {"$in": climb_ids}})
+    df = pd.DataFrame.from_records(list(climbs))
+
+    # do some basic cleaning 
+    df = df.fillna(-1)
+    df['climb_type'] = df['climb_type'].apply(lambda x: x.strip('][').split(', '))   
+
+    # return the df
+    return df
+
 def generate_notes(rec_df, web_params):
     """
     This function generates a list of notes based on the recommendations and the web_params. Note 

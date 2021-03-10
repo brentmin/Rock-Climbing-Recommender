@@ -33,8 +33,9 @@ def cosine_rec(args=None, data_params=None, web_params=None):
     # get user's ticks and ratings
     ticks_ratings = get_user_ticks(web_params['user_url'])
 
-    # create the df of user ticks that are in the area, and add the ratings
-    user_df = df.merge(ticks_ratings, on="climb_id").drop_duplicates(subset=["name"])
+    #get data of user's past climbs
+    user_df = get_mongo_user_data(ticks_ratings['climb_id'].tolist())
+    user_df = user_df.merge(ticks_ratings, on="climb_id").drop_duplicates(subset=["name"])
 
     # remove climbs the user has already done from the potential recs df
     df = df[~df["climb_id"].isin(user_df["climb_id"])]
