@@ -11,7 +11,7 @@ from django.core.validators import URLValidator
 
 from .forms import RecInputForm
 
-import ast
+import os
 
 import sys
 sys.path.append('../../..')
@@ -45,7 +45,8 @@ def template(form=None, notes="", latitude=33.8734, longitude=-115.9010, results
         "notes": notes,
         "latitude": latitude,
         "longitude": longitude,
-        "results": results
+        "results": results,
+        "google_maps_api_key": os.getenv("GOOGLE_MAPS_API_KEY")
     }
 
     return template_default
