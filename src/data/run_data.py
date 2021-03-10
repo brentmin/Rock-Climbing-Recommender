@@ -21,7 +21,7 @@ def run_data(data_params, args):
                                 run data scraping/cleaning code
     """
     #the mongo connection
-    client_url = 'mongodb+srv://DSC102:coliniscool@cluster0.4gstr.mongodb.net/MountainProject?retryWrites=true&w=majority&ssl=true&ssl_cert_reqs=CERT_NONE'
+    client_url = 'mongodb+srv://DSC102:KcPlrKh0wFH6W5Yh@cluster0.4gstr.mongodb.net/MountainProject?retryWrites=true&w=majority&ssl=true&ssl_cert_reqs=CERT_NONE'
     my_client = MongoClient(client_url)
 
     # first check that we want to run some data scraping/cleaning code
