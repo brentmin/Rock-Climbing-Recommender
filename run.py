@@ -53,22 +53,29 @@ def main(params=None):
     parser.add_argument("--cosine", action="store_true", help="The program will print the " \
         "the top 10 most similar climbs based on the web params.")
     parser.add_argument("--test", action="store_true", help="The program will run all code in a " \
-        "simplified manner. If this flag is present, it will override all other flags and run " \
-        "as if the command \"python run.py -d -c -p\" was run on a small dataset.")
-    parser.add_argument("--delete", action="store_true", help="The program will wipe out all data from MongoDB")
-    parser.add_argument("--upload", action="store_true", help="The program will upload cleaned data to MongoDB")
+        "simplified manner. If this flag is present, it will run top popular and cosine "
+        "recommenders using pre-cleaned data in MongoDB. Using the --test flag is equivalent to " \
+        "running the project using \"python run.py --top-pop --cosine\".")
+    parser.add_argument("--delete", action="store_true", help="The program will wipe out all " \
+        "data from MongoDB. This will not work since the MongoDB login is read only.")
+    parser.add_argument("--upload", action="store_true", help="The program will upload cleaned " \
+        "data to MongoDB. This will not work since the MongoDB login is read only.")
 
     # parse all arguments
     args = vars(parser.parse_args())
     print(args)
 
     # override args if the test flag is present
+    # for a more complete description of what this is doing, refer to README.md or look at 
+    # https://github.com/DSC180-RC/Rock-Climbing-Recommender/blob/master/README.md
     if(args["test"]):
-        args["data"] = True
-        args["clean"] = True
+        # override command line args
+        args["data"] = False
+        args["clean"] = False
         args["data_config"] = ["config/data_params.json"]
         args["web_config"] = ["config/web_params.json"]
         args["top_pop"] = True
+        args["cosine"] = True
         args["delete"] = False
         args["upload"] = False
     

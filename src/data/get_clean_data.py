@@ -19,23 +19,11 @@ def get_clean_data(data_params):
                                 the location at which to download raw data and the location at which
                                 to save clean data
     """
-    state_names = ["Alabama" ,"Alaska", "Arkansas", "Arizona", "California", 
-                   "Colorado", "Connecticut", "Delaware", "Florida", "Georgia", 
-                   "Hawaii", "Iowa", "Idaho", "Illinois", "Indiana", "Kansas", 
-                   "Kentucky", "Louisiana", "Massachusetts", "Maryland", "Maine", 
-                   "Michigan", "Minnesota", "Missouri", "Mississippi", "Montana", 
-                   "North Carolina", "North Dakota", "Nebraska", "New Hampshire", 
-                   "New Jersey", "New Mexico", "Nevada", "New York", "Ohio", 
-                   "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", 
-                   "South Carolina", "South Dakota", "Tennessee", "Texas", 
-                   "Utah", "Virginia", "Vermont", "Washington", "Wisconsin", 
-                   "West Virginia", "Wyoming"]
-
-    state_names.sort()
-    for state in state_names:
+    # iterate over every state
+    # it is assumed that data is saved and named accoring to get_raw_data.py
+    for state in data_params["state"]:
         # get the url at which raw data will be found
-        # TODO: sync up the file names between this file and get_raw_data.py
-        raw_data_path = make_absolute(data_params["raw_data_folder"] + state+".json")
+        raw_data_path = make_absolute(data_params["raw_data_folder"] + state + ".json")
         print(raw_data_path)
         
         # get the data
@@ -59,12 +47,10 @@ def get_clean_data(data_params):
 
         # save the lists of lists as csv data in the proper location
         clean_data_path = str(make_absolute(data_params["clean_data_folder"])) + "/"
-        with open(clean_data_path + state+"_climbs.csv", "w", encoding="utf-8", newline="") as f:
+        with open(clean_data_path + state + "_climbs.csv", "w", encoding="utf-8", 
+            newline="") as f:
             writer = csv.writer(f)
             writer.writerows(climb_data)
-        #with open(clean_data_path + "users.csv", "w", encoding="utf-8", newline="") as f:
-            #writer = csv.writer(f)
-            #writer.writerows(user_data)
 
 def roman_to_int(s):
     rom_val = {'I': 1, 'V': 5, 'X': 10, 'L': 50, 'C': 100, 'D': 500, 'M': 1000}
