@@ -55,15 +55,16 @@ def main(params=None):
     parser.add_argument("--test", action="store_true", help="The program will run all code in a " \
         "simplified manner. If this flag is present, it will run top popular and cosine "
         "recommenders using pre-cleaned data in MongoDB. Using the --test flag is equivalent to " \
-        "running the project using \"python run.py --top-pop --cosine\".")
+        "running the project using \"python run.py --top-pop --cosine --debug\".")
     parser.add_argument("--delete", action="store_true", help="The program will wipe out all " \
         "data from MongoDB. This will not work since the MongoDB login is read only.")
     parser.add_argument("--upload", action="store_true", help="The program will upload cleaned " \
         "data to MongoDB. This will not work since the MongoDB login is read only.")
+    parser.add_argument("--debug", action="store_true", help="The program will do various print " \
+        "statements if this flag is present.")
 
     # parse all arguments
     args = vars(parser.parse_args())
-    print(args)
 
     # override args if the test flag is present
     # for a more complete description of what this is doing, refer to README.md or look at 
@@ -78,21 +79,41 @@ def main(params=None):
         args["cosine"] = True
         args["delete"] = False
         args["upload"] = False
+        args["debug"] = True
+
+    # debug print after all command line args are set
+    if(args["debug"]):
+        print("Command line args:")
+        print(args)
+        print()
     
     # read the config files
     data_params = get_params(args["data_config"][0])
     web_params = get_params(args["web_config"][0])
+
+    # debug print for config files
+    if(args["debug"]):
+        print("Data config file:")
+        print(data_params)
+        print()
+        print("Web config file:")
+        print(web_params)
+        print()
 
     # run data code
     run_data(data_params, args)
 
     # run top pop code if requested
     if(args["top_pop"]):
+        print("Top pop results:")
         print(top_pop(args, data_params, web_params))
+        print()
 
     # run top pop code if requested
     if(args["cosine"]):
+        print("Cosine rec results:")
         print(cosine_rec(args, data_params, web_params))
+        print()
 
 # run.py cannot be imported as a module
 if __name__ == '__main__':
