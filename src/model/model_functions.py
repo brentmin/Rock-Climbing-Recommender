@@ -23,7 +23,7 @@ def get_mongo_data(web_params):
                             location.
     """
     # get a connection to mongo
-    client = MongoClient('mongodb+srv://DSC102:KcPlrKh0wFH6W5Yh@cluster0.4gstr.mongodb.net/MountainProject?retryWrites=true&w=majority&ssl=true&ssl_cert_reqs=CERT_NONE')
+    client = MongoClient('mongodb+srv://DSC102:KcPlrKh0wFH6W5Yh@cluster0.4gstr.mongodb.net/Cluster0?retryWrites=true&w=majority&ssl=true&ssl_cert_reqs=CERT_NONE')
 
     # create an approximation lat/lng square from the web params
     
