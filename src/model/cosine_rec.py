@@ -21,11 +21,20 @@ from src.model.model_functions import get_mongo_data, format_df, generate_notes,
 
 def cosine_rec(args=None, data_params=None, web_params=None):
     """
-    TODO
+    A recommender which recommends climbs based on the users previously liked climbs
 
-    :param:     args            TODO
-    :param:     data_params     TODO
-    :param:     web_params      TODO
+    :param:     args            Command line arguments
+    :param:     data_params     Data params for running the project from the command line
+    :param:     web_params      Params from the website
+
+    :return:    dict            A dictionary in the following format:   
+                                {
+                                    "recommendations": [{"name": str, "url": int, "reason": str,
+                                        "difficulty": str, "description": str}, {}, ...],
+                                    "notes": str
+                                }
+                                Where each item in the "recommendations" list is a singular 
+                                recommendation. All recommenders should return in this format
     """
     # get filtered data from mongo based on the input web params
     df = get_mongo_data(web_params)
