@@ -17,7 +17,7 @@ import requests
 from bs4 import BeautifulSoup, Tag
 import json
 
-from src.model.model_functions import get_mongo_data, format_df, generate_notes
+from src.model.model_functions import get_mongo_data, format_df, generate_notes, get_mongo_user_data
 
 def cosine_rec(args=None, data_params=None, web_params=None):
     """
