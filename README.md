@@ -2,7 +2,7 @@
 
 # OnSight: Outdoor Rock Climbing Recommendations
 
-If you would like to read our full process and finding, please refer to Report.pdf.
+If you would like to read our full process and finding, please refer to [Report.pdf][https://github.com/brentmin/Rock-Climbing-Recommender/blob/master/Report.pdf].
 
 Recommendations for outdoor rock climbing has historically been limited to word of mouth, guide books, and most popular climbs. With our project OnSight, we believe we can offer personalized recommendations for outdoor rock climbers.
 
