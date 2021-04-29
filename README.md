@@ -2,6 +2,8 @@
 
 # OnSight: Outdoor Rock Climbing Recommendations
 
+If you would like to read our full process and finding, please refer to Report.pdf.
+
 Recommendations for outdoor rock climbing has historically been limited to word of mouth, guide books, and most popular climbs. With our project OnSight, we believe we can offer personalized recommendations for outdoor rock climbers.
 
 Disclaimer: With rock climbing, especially outdoors, there is an inherent risk that is taken when you decide to climb. Although our recommender tries to offer routes similar to the ones users have done, there is still a risk that the route may be too hard and therefore dangerous. This is not a problem that is solely put on the recommender, but a problem with rock climbing as a whole. There is no standard in climbing grades, but rather it is an agreement among the climbers that have climbed that route. Therefore climbing grades are subjective, and climbs may be harder and more dangerous than a user expects. We realize this, and we encourage everyone to look at the safety information of each climb on its corresponding climbing page on Mountain Project.
